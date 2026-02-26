@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Calendário Acadêmico 2026</title>
-<link rel="icon" href="data:,">
+
+<link rel="icon" type="image/png" href="favicon.ico">
+
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  /* ─── VARIÁVEIS ─── */
+  /* ─── VARIÁVEIS & CORES REFINADAS ─── */
   :root {
-    --bg-color: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --card-hover: rgba(255, 255, 255, 0.05);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --text-main: #f1f5f9;
-    --text-muted: #94a3b8;
-    --accent: #3b82f6;
+    /* MODO ESCURO MAIS PROFUNDO E DESSATURADO */
+    --bg-color: #0a0a0a; /* Quase preto */
+    --card-bg: rgba(24, 24, 24, 0.85); /* Carvão escuro */
+    --card-hover: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.05);
+    --text-main: #e0e0e0; /* Branco suave */
+    --text-muted: #888888; /* Cinza médio */
+    --accent: #5c8dd6; /* Azul dessaturado */
     --tag-bg: rgba(255,255,255,0.05);
     --tag-bg-active: var(--accent);
-    --input-bg: rgba(0,0,0,0.2);
+    --input-bg: rgba(20, 20, 20, 0.9);
     
-    /* Status Colors */
-    --danger: #ef4444;   
-    --success: #10b981;  
-    --warning: #f59e0b;  
-    --info: #3b82f6;     
+    /* Status Colors (Levemente ajustadas para dark) */
+    --danger: #cf4c4c;   
+    --success: #2ea073;  
+    --warning: #c78e28;  
+    --info: #4a7abd;     
     
     --radius: 16px;
     --font: 'Plus Jakarta Sans', sans-serif;
-    --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* Transição padronizada e mais suave */
+    --transition: 0.3s ease-in-out;
   }
 
   [data-theme="light"] {
-    --bg-color: #f0f4f8;
-    --card-bg: rgba(255, 255, 255, 0.65);
-    --card-hover: rgba(255, 255, 255, 0.9);
-    --card-border: rgba(0, 0, 0, 0.06);
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --tag-bg: rgba(0,0,0,0.05);
-    --input-bg: rgba(255,255,255,0.5);
-    --accent: #2563eb;
+    /* MODO CLARO MAIS ACINZENTADO PARA CONFORTO VISUAL */
+    --bg-color: #e5e7eb; /* Cinza claro, não branco */
+    --card-bg: rgba(250, 250, 250, 0.8); /* Off-white */
+    --card-hover: rgba(255, 255, 255, 0.95);
+    --card-border: rgba(0, 0, 0, 0.04);
+    --text-main: #333333; /* Preto suave */
+    --text-muted: #666666;
+    --tag-bg: rgba(0,0,0,0.04);
+    --input-bg: rgba(240, 240, 240, 0.9);
+    --accent: #3b71ca; /* Azul um pouco mais sóbrio */
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -54,16 +56,18 @@
     color: var(--text-main);
     min-height: 100vh;
     padding: 2rem 1rem;
-    padding-top: 3rem; /* Espaço para barra de progresso */
+    padding-top: 3rem;
+    /* Transição suave aplicada globalmente ao body */
     transition: background-color var(--transition), color var(--transition);
   }
 
   .container { max-width: 720px; margin: 0 auto; position: relative; }
 
-  /* 4. BARRA DE PROGRESSO DO SEMESTRE */
+  /* BARRA DE PROGRESSO */
   .progress-container {
     position: fixed; top: 0; left: 0; width: 100%; height: 6px;
     background: var(--tag-bg); z-index: 1000;
+    transition: background-color var(--transition);
   }
   .progress-bar {
     height: 100%; background: linear-gradient(90deg, var(--accent), var(--success));
@@ -75,6 +79,7 @@
     font-weight: 700; color: var(--text-muted); z-index: 1001;
     background: var(--card-bg); padding: 4px 8px; border-radius: 8px;
     border: 1px solid var(--card-border); backdrop-filter: blur(4px);
+    transition: background-color var(--transition), border-color var(--transition), color var(--transition);
   }
 
   /* HEADER & CONTROLS */
@@ -93,6 +98,7 @@
     background: var(--card-bg); border: 1px solid var(--card-border);
     backdrop-filter: blur(12px); border-radius: var(--radius); padding: 1.5rem;
     margin-bottom: 2rem;
+    transition: background-color var(--transition), border-color var(--transition);
   }
   .top-tools { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
   .search-box { flex: 1; position: relative; }
@@ -100,6 +106,7 @@
     width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
     color: var(--text-main); padding: 12px 12px 12px 40px; border-radius: 10px;
     font-family: var(--font); font-weight: 500;
+    transition: var(--transition);
   }
   .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px; }
 
@@ -111,25 +118,28 @@
   }
   .tag.active { background: var(--tag-bg-active); color: white; transform: scale(1.05); }
 
-  /* 2. STICKY HEADERS (MÊS) */
+  /* ─── STICKY HEADERS (Transição Corrigida) ─── */
   .month-header {
     position: sticky; top: 0px; z-index: 10;
-    background: var(--bg-color); /* Fallback */
+    background: var(--bg-color); /* Garante fundo sólido na transição */
     backdrop-filter: blur(10px);
     padding: 10px 0; margin-bottom: 10px;
     font-size: 1.1rem; font-weight: 800; color: var(--accent);
     border-bottom: 1px solid var(--card-border);
     text-transform: capitalize;
+    /* Transição explícita para sincronizar com o body e evitar "quadrados" */
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
   }
 
-  /* LISTA & CARDS */
+  /* LISTA & CARDS (Transição Corrigida) */
   .event-list { display: flex; flex-direction: column; gap: 0.8rem; padding-bottom: 1rem; }
   
   .event-card {
     display: grid; grid-template-columns: 70px 1fr auto; align-items: stretch;
     background: var(--card-bg); border-radius: 12px; overflow: hidden;
     border: 1px solid transparent; cursor: default; position: relative;
-    transition: transform 0.2s, background 0.3s;
+    /* Transição explícita do background e border */
+    transition: transform 0.2s, background-color var(--transition), border-color var(--transition);
   }
   .event-card:hover { transform: translateY(-3px); background: var(--card-hover); border-color: var(--card-border); z-index: 2; }
 
@@ -137,40 +147,41 @@
     background: var(--input-bg); display: flex; flex-direction: column;
     align-items: center; justify-content: center; padding: 0 10px;
     font-size: 1.1rem; font-weight: 800; line-height: 1; color: var(--text-muted);
+    transition: background-color var(--transition), color var(--transition);
   }
   .date-box span { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
 
   .info-box { padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; }
   
   .card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .event-name { font-weight: 700; font-size: 1rem; color: var(--text-main); }
+  .event-name { font-weight: 700; font-size: 1rem; color: var(--text-main); transition: color var(--transition); }
   .event-disc { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  .type-indicator { width: 5px; height: 100%; }
+  .type-indicator { width: 5px; height: 100%; transition: background-color var(--transition); }
   
-  /* Cores Tipos */
-  .type-prova .date-box { color: var(--danger); background: rgba(239, 68, 68, 0.15); }
+  /* Cores Tipos (Transições ajustadas) */
+  .type-prova .date-box { color: var(--danger); background: rgba(207, 76, 76, 0.15); }
   .type-prova .type-indicator { background: var(--danger); }
-  .type-pratica .date-box { color: var(--success); background: rgba(16, 185, 129, 0.15); }
+  .type-pratica .date-box { color: var(--success); background: rgba(46, 160, 115, 0.15); }
   .type-pratica .type-indicator { background: var(--success); }
-  .type-trabalho .date-box { color: var(--info); background: rgba(59, 130, 246, 0.15); }
+  .type-trabalho .date-box { color: var(--info); background: rgba(74, 122, 189, 0.15); }
   .type-trabalho .type-indicator { background: var(--info); }
-  .type-final .date-box { color: var(--warning); background: rgba(245, 158, 11, 0.15); }
+  .type-final .date-box { color: var(--warning); background: rgba(199, 142, 40, 0.15); }
   .type-final .type-indicator { background: var(--warning); }
 
-  /* 1. BADGES DE URGÊNCIA */
+  /* BADGES */
   .badge {
     font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;
     letter-spacing: 0.05em; margin-left: 10px; text-transform: uppercase;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
   }
   .badge-today { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
   .badge-soon { background: var(--warning); color: #000; }
-  .badge-normal { background: var(--card-border); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); }
 
   @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-  /* 3. BOTÃO CALENDÁRIO */
+  /* BOTÃO CALENDÁRIO */
   .actions { padding: 0 10px; display: flex; align-items: center; justify-content: center; }
   .btn-add-cal {
     background: transparent; border: none; color: var(--text-muted);
@@ -179,22 +190,23 @@
   .btn-add-cal:hover { background: var(--tag-bg); color: var(--accent); transform: scale(1.1); }
   .btn-add-cal svg { width: 20px; height: 20px; }
 
-  /* 5. SKELETON LOADING */
+  /* SKELETON LOADING */
   .skeleton {
     background: linear-gradient(90deg, var(--card-border) 25%, var(--card-hover) 50%, var(--card-border) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 6px;
+    background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px;
   }
   .sk-card { height: 74px; border-radius: 12px; margin-bottom: 10px; }
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
   /* ARQUIVO */
-  .archive-section { margin-top: 2rem; border-top: 1px dashed var(--card-border); padding-top: 2rem; }
+  .archive-section { 
+    margin-top: 2rem; border-top: 1px dashed var(--card-border); padding-top: 2rem;
+    transition: border-color var(--transition);
+  }
   .btn-archive-toggle {
     background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--card-border);
     padding: 10px 24px; border-radius: 99px; font-size: 0.85rem; font-weight: 700;
-    cursor: pointer; width: 100%; transition: 0.2s;
+    cursor: pointer; width: 100%; transition: var(--transition);
   }
   .btn-archive-toggle:hover { background: var(--card-hover); color: var(--text-main); }
   .event-card.is-past { filter: grayscale(1); opacity: 0.5; }
@@ -232,10 +244,53 @@
   </div>
 </div>
 
-<script src="data.js"></script>
+<script>
+const EXTERNAL_CONFIG = {
+  year: 2026,
+  semesterStart: '2026-02-01',
+  semesterEnd:   '2026-07-15',
+  title: "Calendário Acadêmico",
+  subtitle: "Semestre 2026.1",
+  data: [
+    { d: "02/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
+    { d: "09/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
+    { d: "23/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
+    { d: "30/03", disc: "Oftalmologia", title: "P1 — Multimídia", type: "prova" },
+    { d: "06/04", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
+    { d: "08/04", disc: "Clínica Médica", title: "AVE1 Clínica", type: "prova" },
+    { d: "10/04", disc: "Ginecologia", title: "B1 Hac GO", type: "pratica" },
+    { d: "13/04", disc: "Ginecologia", title: "AV1 GO", type: "prova" },
+    { d: "13/04", disc: "Ortopedia", title: "Seminário 7", type: "trabalho" },
+    { d: "17/04", disc: "Ginecologia", title: "B1 DPGO", type: "pratica" },
+    { d: "20/04", disc: "Ortopedia", title: "AVT1 Ortop", type: "prova" },
+    { d: "24/04", disc: "Ginecologia", title: "B2 Hac GO", type: "pratica" },
+    { d: "27/04", disc: "Oftalmologia", title: "AVT1 Oftalmo", type: "prova" },
+    { d: "04/05", disc: "Oftalmologia", title: "Prática de Oftalmo", type: "pratica" },
+    { d: "08/05", disc: "Ginecologia", title: "B2 DPGO", type: "pratica" },
+    { d: "11/05", disc: "Oftalmologia", title: "Seminário 1", type: "trabalho" },
+    { d: "15/05", disc: "Clínica Médica", title: "B2 CSR", type: "pratica" },
+    { d: "15/05", disc: "Ginecologia", title: "B3 Hac GO", type: "pratica" },
+    { d: "22/05", disc: "Clínica Médica", title: "B2 CSR", type: "pratica" },
+    { d: "22/05", disc: "Ginecologia", title: "B3 DPGO", type: "pratica" },
+    { d: "25/05", disc: "Oftalmologia", title: "Seminário 2", type: "trabalho" },
+    { d: "29/05", disc: "Clínica Médica", title: "B3 CSR", type: "pratica" },
+    { d: "29/05", disc: "Ginecologia", title: "B4 Hac GO", type: "pratica" },
+    { d: "01/06", disc: "Oftalmologia", title: "Prática Oftalmo", type: "pratica" },
+    { d: "05/06", disc: "Clínica Médica", title: "B3 CSR", type: "pratica" },
+    { d: "05/06", disc: "Ginecologia", title: "B4 DPGO", type: "pratica" },
+    { d: "08/06", disc: "Oftalmologia", title: "AVE2 Oftalmo", type: "prova" },
+    { d: "11/06", disc: "Clínica Médica", title: "AVE2 Clínica", type: "prova" },
+    { d: "12/06", disc: "Clínica Médica", title: "B4 CSR", type: "pratica" },
+    { d: "15/06", disc: "Oftalmologia", title: "P2 (Projeto Mídias)", type: "trabalho" },
+    { d: "16/06", disc: "Pediatria", title: "OSCE Pediatria", type: "prova" },
+    { d: "16/06", disc: "Clínica Médica", title: "AVP2 (Início)", type: "final" },
+    { d: "19/06", disc: "Clínica Médica", title: "B4 CSR (e fim AVP2)", type: "pratica" },
+    { d: "22/06", disc: "Ginecologia", title: "AV2 GO", type: "final" }
+  ]
+};
+</script>
 
 <script>
-if (typeof EXTERNAL_CONFIG === 'undefined') alert("Erro: data.js não carregado.");
 const CONFIG = EXTERNAL_CONFIG;
 
 class App {
@@ -243,14 +298,11 @@ class App {
     this.events = [];
     this.today = new Date(); this.today.setHours(0,0,0,0);
     this.state = { activeDisc: 'Todas', searchTerm: '', isArchiveOpen: false };
-    
-    // Inicia com Skeleton Loading
     this.renderSkeleton();
-    setTimeout(() => this.init(), 800); // 800ms delay para simular loading
+    setTimeout(() => this.init(), 800);
   }
 
   init() {
-    // 1. Processar Dados
     this.events = CONFIG.data.map(item => {
       const [d, m] = item.d.split('/').map(Number);
       const dateObj = new Date(CONFIG.year, m - 1, d);
@@ -264,28 +316,23 @@ class App {
     this.setupFilters();
     this.setupSearch();
     this.setupArchive();
-    this.updateProgress(); // Calcula barra de progresso
+    this.updateProgress();
     this.render();
   }
 
-  // ─── 4. BARRA DE PROGRESSO ───
   updateProgress() {
     const start = new Date(CONFIG.semesterStart);
     const end = new Date(CONFIG.semesterEnd);
     const total = end - start;
     const current = this.today - start;
-    
     let pct = Math.floor((current / total) * 100);
     if (pct < 0) pct = 0; if (pct > 100) pct = 100;
-
     document.getElementById('progressBar').style.width = `${pct}%`;
     document.getElementById('progressLabel').innerText = `${pct}% Concluído`;
   }
 
-  // ─── 5. SKELETON LOADING ───
   renderSkeleton() {
-    const container = document.getElementById('eventsContainer');
-    container.innerHTML = Array(5).fill('<div class="skeleton sk-card"></div>').join('');
+    document.getElementById('eventsContainer').innerHTML = Array(5).fill('<div class="skeleton sk-card"></div>').join('');
   }
 
   setupTheme() {
@@ -324,39 +371,28 @@ class App {
     const btn = document.getElementById('btnToggleArchive');
     btn.onclick = () => {
         this.state.isArchiveOpen = !this.state.isArchiveOpen;
-        const list = document.getElementById('archiveContainer');
-        list.style.display = this.state.isArchiveOpen ? 'flex' : 'none';
+        document.getElementById('archiveContainer').style.display = this.state.isArchiveOpen ? 'flex' : 'none';
         btn.innerText = this.state.isArchiveOpen ? "Ocultar Histórico" : `Ver Histórico (${document.getElementById('archiveCount').innerText})`;
     };
   }
 
   fmtBox(d) { return { day: d.getDate().toString().padStart(2,'0'), month: d.toLocaleString('pt-BR',{month:'short'}).replace('.','') }; }
 
-  // ─── 3. GERAR ARQUIVO .ICS ───
-  generateICS(ev) {
-    const fmt = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g,"").slice(0,15) + "Z";
+  // NOVA FUNÇÃO: Link direto para Google Calendar
+  openGoogleCalendar(ev) {
+    const fmt = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g, "").slice(0, 15) + "Z";
     const start = fmt(ev.dateObj);
-    // Adiciona 1 hora para o fim
     const endDate = new Date(ev.dateObj); endDate.setHours(endDate.getHours() + 1);
     const end = fmt(endDate);
-
-    const icsMsg = [
-        "BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT",
-        `DTSTART:${start}`, `DTEND:${end}`,
-        `SUMMARY:${ev.title}`, `DESCRIPTION:${ev.disc} - ${ev.type}`,
-        "END:VEVENT", "END:VCALENDAR"
-    ].join("\n");
-
-    const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', `${ev.title}.ics`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    
+    // Adiciona "Recurso Visual Adicionado" na descrição
+    const details = encodeURIComponent(`${ev.disc} - ${ev.type}. (Recurso Visual Adicionado)`);
+    const title = encodeURIComponent(ev.title);
+    
+    const gCalUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&sf=true&output=xml`;
+    window.open(gCalUrl, '_blank');
   }
 
-  // ─── 1. LÓGICA DE URGÊNCIA ───
   getUrgency(dateObj) {
     const diffTime = dateObj - this.today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
@@ -372,12 +408,12 @@ class App {
     const el = document.createElement('div');
     el.className = `event-card type-${ev.type} ${isPast ? 'is-past' : ''}`;
     
-    // Botão Calendar
+    // Botão Calendar Atualizado para Link
     const btnCal = document.createElement('button');
     btnCal.className = 'btn-add-cal';
-    btnCal.title = "Adicionar ao Calendário";
+    btnCal.title = "Abrir no Google Calendar";
     btnCal.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
-    btnCal.onclick = () => this.generateICS(ev);
+    btnCal.onclick = () => this.openGoogleCalendar(ev);
 
     el.innerHTML = `
       <div class="date-box">${day}<span>${month}</span></div>
@@ -390,15 +426,8 @@ class App {
       </div>
       <div class="type-indicator" title="${ev.type}"></div>
     `;
-    
-    // Inserir botão de calendário na grid (coluna extra)
-    // Ajustamos css grid para 4 colunas ou usamos absolute? 
-    // Vamos usar a estrutura atual e adicionar o botão no final
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-    actions.appendChild(btnCal);
-    el.appendChild(actions);
-
+    const actions = document.createElement('div'); actions.className = 'actions';
+    actions.appendChild(btnCal); el.appendChild(actions);
     return el;
   }
 
@@ -406,7 +435,6 @@ class App {
     const mainContainer = document.getElementById('eventsContainer');
     const archiveContainer = document.getElementById('archiveContainer');
     
-    // Filtros
     const filtered = this.events.filter(ev => {
         const inDisc = this.state.activeDisc === 'Todas' || ev.disc === this.state.activeDisc;
         const inSearch = ev.title.toLowerCase().includes(this.state.searchTerm);
@@ -419,12 +447,10 @@ class App {
     document.getElementById('archiveCount').innerText = pastEvents.length;
     document.getElementById('archiveSection').style.display = pastEvents.length > 0 ? 'block' : 'none';
 
-    // Render Principal com Sticky Headers
     mainContainer.innerHTML = '';
     if (futureEvents.length === 0) {
         mainContainer.innerHTML = `<div class="empty-state">🍃 Nada pendente.</div>`;
     } else {
-        // ─── 2. LOGICA DE STICKY HEADERS ───
         let currentMonth = '';
         futureEvents.forEach(ev => {
             const evMonth = ev.dateObj.toLocaleString('pt-BR', { month: 'long' });
@@ -439,7 +465,6 @@ class App {
         });
     }
 
-    // Render Histórico (Sem headers para simplificar)
     archiveContainer.innerHTML = '';
     pastEvents.forEach(ev => archiveContainer.appendChild(this.createCard(ev, true)));
   }
