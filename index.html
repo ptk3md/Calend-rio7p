@@ -3,634 +3,435 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Calendário Acadêmico 2025</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<title>Calendário Acadêmico Moderno</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+  /* ─── VARIÁVEIS & RESET ─── */
   :root {
-    --bg: #0a0f18;
-    --surface: #111827;
-    --surface2: #161f2e;
-    --border: #1e2d3d;
-    --red: #BD4234;
-    --text: #e8edf5;
-    --text-muted: #4a6080;
-    --text-dim: #6b8aaa;
-    --row-dark: #151e2b;
-    --row-final: #252f3f;
-    --track-h: 4px;
-    --thumb-size: 18px;
+    --bg-color: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --accent: #3b82f6; /* Azul moderno */
+    --accent-glow: rgba(59, 130, 246, 0.3);
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --danger: #ef4444;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --radius: 16px;
+    --font: 'Plus Jakarta Sans', sans-serif;
   }
 
-  html { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); }
+  * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+  
   body {
+    font-family: var(--font);
+    background-color: var(--bg-color);
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.05), transparent 25%);
+    color: var(--text-main);
     min-height: 100vh;
-    background: radial-gradient(ellipse 70% 30% at 50% 0%, rgba(189,66,52,0.06) 0%, transparent 65%), var(--bg);
+    padding: 2rem 1rem;
   }
 
-  .app { max-width: 700px; margin: 0 auto; padding: 32px 16px 80px; }
+  .container { max-width: 720px; margin: 0 auto; }
 
-  /* ── HEADER ── */
-  .header { margin-bottom: 28px; }
-  .header-title {
-    font-size: 26px; font-weight: 900; letter-spacing: -0.04em;
-    background: linear-gradient(135deg, #e8edf5 40%, #5a7a99);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1;
+  /* ─── HEADER ─── */
+  header { margin-bottom: 2rem; text-align: center; }
+  h1 { 
+    font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .header-sub { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .subtitle { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  /* ── FILTER CARD ── */
-  .filter-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px 20px 18px;
-    margin-bottom: 24px;
-  }
-
-  /* ── SLIDER SECTION ── */
-  .slider-section { margin-bottom: 18px; }
-
-  .slider-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 14px;
-  }
-  .slider-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
-  .slider-range-display {
-    font-size: 12px; font-weight: 700; color: var(--red);
-    background: rgba(189,66,52,0.1); border: 1px solid rgba(189,66,52,0.2);
-    padding: 3px 10px; border-radius: 20px; letter-spacing: 0.02em;
+  /* ─── CONTROLS CARD ─── */
+  .controls {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    margin-bottom: 2rem;
   }
 
-  /* Dual range slider */
-  .range-wrap {
-    position: relative;
-    height: 36px;
-    display: flex; align-items: center;
+  /* Search & Filter Row */
+  .top-tools { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .search-box {
+    flex: 1; position: relative; min-width: 200px;
+  }
+  .search-box input {
+    width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--card-border);
+    color: var(--text-main); padding: 10px 12px 10px 36px; border-radius: 8px;
+    font-size: 0.9rem; transition: 0.2s; font-family: var(--font);
+  }
+  .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); width: 16px; height: 16px;
   }
 
-  .range-track {
-    position: absolute; left: 0; right: 0;
-    height: var(--track-h);
-    background: var(--border);
-    border-radius: 99px;
-    pointer-events: none;
+  /* Discipline Tags */
+  .filter-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tag {
+    background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);
+    color: var(--text-muted); padding: 6px 12px; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+    user-select: none;
   }
-  .range-fill {
-    position: absolute;
-    height: var(--track-h);
-    background: var(--red);
-    border-radius: 99px;
-    pointer-events: none;
-    transition: left 0.05s, width 0.05s;
-  }
+  .tag:hover { background: rgba(255,255,255,0.1); }
+  .tag.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 4px 12px var(--accent-glow); }
 
+  /* Slider Area */
+  .slider-container { margin-top: 1.5rem; padding: 0 0.5rem; }
+  .slider-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 700; text-transform: uppercase; }
+  .slider-date-display { color: var(--accent); }
+
+  .range-wrapper { position: relative; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin: 10px 0; }
+  .range-fill { position: absolute; height: 100%; background: var(--accent); border-radius: 10px; z-index: 1; }
   .range-input {
-    position: absolute; left: 0; right: 0;
-    width: 100%;
-    appearance: none; -webkit-appearance: none;
-    background: transparent;
-    height: var(--track-h);
-    outline: none; border: none;
-    pointer-events: none;
+    position: absolute; top: -6px; width: 100%; height: 20px;
+    appearance: none; background: transparent; pointer-events: none; z-index: 2;
   }
   .range-input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: var(--thumb-size); height: var(--thumb-size);
-    border-radius: 50%;
-    background: #fff;
-    border: 3px solid var(--red);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    cursor: pointer;
-    pointer-events: all;
-    transition: transform 0.15s, box-shadow 0.15s;
+    appearance: none; pointer-events: all; width: 18px; height: 18px;
+    background: white; border-radius: 50%; cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3); margin-top: 1px;
+    transition: transform 0.1s;
   }
-  .range-input::-webkit-slider-thumb:hover,
-  .range-input:active::-webkit-slider-thumb {
-    transform: scale(1.2);
-    box-shadow: 0 0 0 4px rgba(189,66,52,0.25), 0 2px 8px rgba(0,0,0,0.5);
-  }
-  .range-input::-moz-range-thumb {
-    width: var(--thumb-size); height: var(--thumb-size);
-    border-radius: 50%;
-    background: #fff; border: 3px solid var(--red);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    cursor: pointer; pointer-events: all;
-  }
+  .range-input::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
-  /* Month tick marks */
-  .tick-row {
-    display: flex; justify-content: space-between;
-    margin-top: 10px; padding: 0 1px;
+  /* ─── LISTA DE EVENTOS ─── */
+  .event-list { display: flex; flex-direction: column; gap: 1.5rem; }
+  .group-title {
+    font-size: 0.85rem; color: var(--text-muted); font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 0.5rem; border-bottom: 1px solid var(--card-border);
+    padding-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;
   }
-  .tick {
-    font-size: 10px; font-weight: 700; color: var(--text-muted);
-    text-align: center; flex: 1;
-    transition: color 0.2s;
-    letter-spacing: 0.02em;
+  
+  .event-card {
+    display: grid; grid-template-columns: 70px 1fr auto; align-items: center;
+    background: var(--surface2); border-radius: 8px; overflow: hidden;
+    margin-bottom: 6px; border: 1px solid transparent;
+    transition: transform 0.2s, background 0.2s;
+    animation: slideIn 0.3s ease forwards;
   }
-  .tick.in-range { color: var(--red); }
+  .event-card:hover { transform: translateX(4px); background: rgba(255,255,255,0.03); border-color: var(--card-border); }
 
-  /* Quick presets */
-  .presets-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 14px; }
-  .preset-btn {
-    padding: 4px 11px; border-radius: 999px; font-size: 10px; font-weight: 700;
-    border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted);
-    cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em; text-transform: uppercase;
+  .date-box {
+    background: rgba(0,0,0,0.2); height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 12px;
+    font-size: 0.9rem; font-weight: 700; line-height: 1.1; color: var(--text-muted);
   }
-  .preset-btn:hover { border-color: var(--text-dim); color: var(--text-dim); }
-  .preset-btn.active { background: rgba(189,66,52,0.12); border-color: rgba(189,66,52,0.4); color: var(--red); }
+  .date-box span { font-size: 0.7rem; font-weight: 500; text-transform: uppercase; opacity: 0.7; margin-top: 2px; }
 
-  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .info-box { padding: 12px 16px; }
+  .event-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+  .event-disc { font-size: 0.75rem; color: var(--text-muted); }
 
-  /* Discipline filter */
-  .filter-group-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-  .filter-row { display: flex; gap: 5px; flex-wrap: wrap; }
-  .filter-btn {
-    padding: 5px 13px; border-radius: 999px; font-size: 11px; font-weight: 700;
-    border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted);
-    cursor: pointer; transition: all 0.18s; white-space: nowrap;
+  /* Tipos de Evento (Cores) */
+  .type-indicator {
+    width: 4px; height: 25px; border-radius: 4px; margin-right: 12px;
   }
-  .filter-btn:hover { border-color: #3a5070; color: var(--text-dim); }
-  .filter-btn.active-disc { background: var(--red); border-color: var(--red); color: #fff; }
+  .type-prova     .date-box { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+  .type-prova     .type-indicator { background: var(--danger); }
+  
+  .type-pratica   .date-box { color: var(--success); background: rgba(16, 185, 129, 0.1); }
+  .type-pratica   .type-indicator { background: var(--success); }
 
-  /* ── COUNT BADGE ── */
-  .count-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 11px; font-weight: 700; color: var(--text-muted);
-    margin-bottom: 16px;
+  .type-trabalho  .date-box { color: var(--accent); background: rgba(59, 130, 246, 0.1); }
+  .type-trabalho  .type-indicator { background: var(--accent); }
+
+  .type-final     .date-box { color: var(--warning); background: rgba(245, 158, 11, 0.1); }
+  .type-final     .type-indicator { background: var(--warning); }
+
+  /* ─── STATUS BAR ─── */
+  .status-bar { 
+    margin-top: 2rem; text-align: center; font-size: 0.8rem; color: var(--text-muted); 
+    background: rgba(0,0,0,0.2); padding: 8px; border-radius: 99px; display: inline-block;
   }
-  .count-num {
-    background: rgba(189,66,52,0.15); color: var(--red); border: 1px solid rgba(189,66,52,0.3);
-    border-radius: 999px; padding: 1px 9px; font-size: 12px; font-weight: 800;
-  }
+  .counter { color: var(--text-main); font-weight: 700; margin-right: 4px; }
 
-  /* ── DISCIPLINE BLOCK ── */
-  .discipline-block { margin-bottom: 22px; animation: fadeUp 0.3s ease both; }
-  .discipline-label {
-    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--text-muted);
-    margin-bottom: 7px; padding-left: 2px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .discipline-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .hidden { display: none; }
+  .empty-state { text-align: center; padding: 3rem; color: var(--text-muted); font-size: 0.9rem; }
 
-  /* ── EVENT ROW ── */
-  .event-row {
-    display: flex; align-items: stretch;
-    border-radius: 6px; overflow: hidden;
-    margin-bottom: 4px; min-height: 42px;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .event-row:hover { transform: translateX(3px); box-shadow: -3px 0 0 var(--red); }
-
-  .date-badge {
-    min-width: 78px; display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 800; border-radius: 6px 0 0 6px;
-    padding: 10px 10px; flex-shrink: 0;
-  }
-  .event-label {
-    flex: 1; display: flex; align-items: center;
-    padding: 10px 16px; font-size: 13px; font-weight: 600;
-    letter-spacing: -0.01em; border-radius: 0 6px 6px 0;
-  }
-
-  .row-task     .date-badge { background: #2a3a4f; color: #c8d8e8; }
-  .row-task     .event-label { background: var(--row-dark); color: var(--text); }
-  .row-exam     .date-badge { background: #9e2f27; color: #fff; }
-  .row-exam     .event-label { background: #c8cdd5; color: #1a1a1a; }
-  .row-final    .date-badge { background: #1f2a38; color: #6b8aaa; }
-  .row-final    .event-label { background: var(--row-final); color: #6b8aaa; }
-  .row-practice .date-badge { background: #1a3a30; color: #4ecba0; }
-  .row-practice .event-label { background: #162a22; color: #4ecba0; }
-
-  /* ── EMPTY ── */
-  .empty { text-align: center; padding: 50px 20px; color: var(--text-muted); font-size: 14px; }
-
-  /* ── LEGEND ── */
-  .legend {
-    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px;
-    padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  }
-  .legend-title { width: 100%; font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
-  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--text-muted); }
-  .legend-swatch { width: 22px; height: 11px; border-radius: 3px; }
-
-  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-
+  @keyframes slideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+  
+  /* Mobile adjustments */
   @media (max-width: 480px) {
-    .date-badge { min-width: 64px; font-size: 12px; }
-    .event-label { font-size: 12px; padding: 8px 10px; }
+    h1 { font-size: 1.5rem; }
+    .event-card { grid-template-columns: 60px 1fr; }
+    .type-indicator { display: none; } /* Oculta indicador lateral no mobile para economizar espaço */
   }
 </style>
 </head>
 <body>
-<div class="app">
 
-  <div class="header">
-    <div class="header-title">Calendário Acadêmico</div>
-    <div class="header-sub">Semestre 2025 · Avaliações e Atividades</div>
-  </div>
+<div class="container">
+  <header>
+    <h1 id="appTitle">Calendário</h1>
+    <div class="subtitle" id="appSubtitle">Carregando...</div>
+  </header>
 
-  <div class="filter-card">
+  <div class="controls">
+    <div class="top-tools">
+      <div class="search-box">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <input type="text" id="searchInput" placeholder="Buscar atividade..." autocomplete="off">
+      </div>
+    </div>
 
-    <!-- SLIDER -->
-    <div class="slider-section">
-      <div class="slider-header">
-        <div class="slider-label">Período</div>
-        <div class="slider-range-display" id="rangeDisplay">—</div>
+    <div class="filter-tags" id="disciplineFilters">
       </div>
 
-      <div class="range-wrap">
-        <div class="range-track"></div>
+    <div class="slider-container">
+      <div class="slider-info">
+        <span>Período</span>
+        <span class="slider-date-display" id="dateRangeLabel">Todo o semestre</span>
+      </div>
+      <div class="range-wrapper">
         <div class="range-fill" id="rangeFill"></div>
-        <input type="range" class="range-input" id="sliderMin" min="0" step="1"/>
-        <input type="range" class="range-input" id="sliderMax" min="0" step="1"/>
+        <input type="range" class="range-input" id="sliderMin" step="1">
+        <input type="range" class="range-input" id="sliderMax" step="1">
       </div>
-
-      <div class="tick-row" id="tickRow"></div>
-
-      <!-- PRESETS -->
-      <div class="presets-row" id="presetRow"></div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- DISCIPLINE -->
-    <div>
-      <div class="filter-group-label">Disciplina</div>
-      <div class="filter-row" id="discFilterRow"></div>
     </div>
   </div>
 
-  <!-- COUNT -->
-  <div class="count-badge">
-    <span class="count-num" id="countNum">0</span>
-    <span>atividades no período</span>
-  </div>
-
-  <!-- CONTENT -->
-  <div id="content"></div>
-
-  <div class="legend">
-    <div class="legend-title">Legenda</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#2a3a4f"></div>Atividade / Seminário</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#9e2f27"></div>Avaliação / Prova</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#1a3a30"></div>Prática</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#1f2a38"></div>Prova Final</div>
+  <main id="eventsContainer" class="event-list"></main>
+  
+  <div style="text-align: center;">
+    <div class="status-bar">
+      Exibindo <span class="counter" id="countDisplay">0</span> eventos
+    </div>
   </div>
 </div>
 
 <script>
-// ── ALL DAYS with events, in order ──
-// We build a sorted list of unique day-indices so the slider snaps to real dates.
+/**
+ * ─── CONFIGURAÇÃO (EDITE AQUI) ───
+ * Aqui você define o ano, as datas limites do semestre e os dados.
+ */
+const CONFIG = {
+  year: 2025,
+  semesterStart: '2025-02-01', // Formato YYYY-MM-DD
+  semesterEnd:   '2025-06-30',
+  title: "Calendário Acadêmico",
+  subtitle: "Semestre 2025.1",
+  
+  // DADOS: Adicione aqui novas disciplinas e eventos.
+  // Tipos disponíveis (pela cor): 'prova', 'trabalho', 'pratica', 'final'
+  data: [
+    // ORTOPEDIA
+    { d: "23/02", disc: "Ortopedia", title: "Seminário 1", type: "trabalho" },
+    { d: "02/03", disc: "Ortopedia", title: "Seminário 2", type: "trabalho" },
+    { d: "20/04", disc: "Ortopedia", title: "AVT1 — Avaliação Teórica", type: "prova" },
 
-const DISCIPLINES = [
-  {
-    id: 'ortop', label: 'Ortopedia',
-    events: [
-      { date: '23/02', label: 'Seminário 1', type: 'task' },
-      { date: '02/03', label: 'Seminário 2', type: 'task' },
-      { date: '09/03', label: 'Seminário 3', type: 'task' },
-      { date: '23/03', label: 'Seminário 4', type: 'task' },
-      { date: '30/03', label: 'Seminário 5', type: 'task' },
-      { date: '06/04', label: 'Seminário 6', type: 'task' },
-      { date: '13/04', label: 'Seminário 7', type: 'task' },
-      { date: '20/04', label: 'AVT1 — Avaliação Teórica', type: 'exam' },
-    ]
-  },
-  {
-    id: 'oftalmo', label: 'Oftalmologia',
-    events: [
-      { date: '30/03', label: 'P1 — Multimídia', type: 'exam' },
-      { date: '27/04', label: 'AVT1 — Avaliação Teórica', type: 'exam' },
-      { date: '04/05', label: 'Prática', type: 'practice' },
-      { date: '11/05', label: 'Seminário 1', type: 'task' },
-      { date: '25/05', label: 'Seminário 2', type: 'task' },
-      { date: '01/06', label: 'Prática', type: 'practice' },
-      { date: '08/06', label: 'AVE2 — Avaliação Escrita', type: 'exam' },
-      { date: '15/06', label: 'P2 — Projeto Mídias', type: 'exam' },
-    ]
-  },
-  {
-    id: 'clinica', label: 'Clínica Médica',
-    subgroups: [
-      {
-        sublabel: 'Clínica Médica',
-        events: [
-          { date: '08/04', label: 'AVE1 — Avaliação Escrita', type: 'exam' },
-          { date: '11/06', label: 'AVE2 — Avaliação Escrita', type: 'exam' },
-          { date: '16/06', label: 'AVP2 — início', type: 'exam' },
-          { date: '17/06', label: 'AVP2', type: 'exam' },
-          { date: '18/06', label: 'AVP2', type: 'exam' },
-          { date: '19/06', label: 'AVP2 — fim', type: 'exam' },
-        ]
-      },
-      {
-        sublabel: 'CSR',
-        events: [
-          { date: '15/05', label: 'B2', type: 'exam' },
-          { date: '22/05', label: 'B2', type: 'exam' },
-          { date: '29/05', label: 'B3', type: 'exam' },
-          { date: '05/06', label: 'B3', type: 'exam' },
-          { date: '12/06', label: 'B4', type: 'exam' },
-          { date: '19/06', label: 'B4', type: 'exam' },
-        ]
-      }
-    ]
-  },
-  {
-    id: 'go', label: 'Ginecologia e Obstetrícia',
-    subgroups: [
-      {
-        sublabel: 'GO',
-        events: [
-          { date: '10/04', label: 'B1 — Hac GO', type: 'exam' },
-          { date: '13/04', label: 'AV1', type: 'exam' },
-          { date: '24/04', label: 'B2 — Hac GO', type: 'exam' },
-          { date: '15/05', label: 'B3 — Hac GO', type: 'exam' },
-          { date: '29/05', label: 'B4 — Hac GO', type: 'exam' },
-          { date: '22/06', label: 'AV2', type: 'exam' },
-        ]
-      },
-      {
-        sublabel: 'DPGO',
-        events: [
-          { date: '17/04', label: 'B1', type: 'exam' },
-          { date: '08/05', label: 'B2', type: 'exam' },
-          { date: '22/05', label: 'B3', type: 'exam' },
-          { date: '05/06', label: 'B4', type: 'exam' },
-        ]
-      }
-    ]
-  },
-  {
-    id: 'ped', label: 'Pediatria',
-    events: [
-      { date: '16/06', label: 'OSCE', type: 'exam' },
-    ]
-  },
-];
+    // OFTALMOLOGIA
+    { d: "30/03", disc: "Oftalmologia", title: "P1 — Multimídia", type: "prova" },
+    { d: "27/04", disc: "Oftalmologia", title: "AVT1 — Teórica", type: "prova" },
+    { d: "04/05", disc: "Oftalmologia", title: "Aula Prática", type: "pratica" },
+    { d: "15/06", disc: "Oftalmologia", title: "P2 — Projeto", type: "trabalho" },
 
-// ── Date utilities ──
-function parseDMY(str) {
-  const [d, m] = str.split('/').map(Number);
-  return new Date(2025, m - 1, d);
-}
-function toSortNum(str) {
-  const [d, m] = str.split('/').map(Number);
-  return m * 100 + d;
-}
-function fmt(date) {
-  const d = String(date.getDate()).padStart(2, '0');
-  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  return `${d} ${months[date.getMonth()]}`;
-}
+    // CLÍNICA MÉDICA
+    { d: "08/04", disc: "Clínica Médica", title: "AVE1 — Avaliação Escrita", type: "prova" },
+    { d: "11/06", disc: "Clínica Médica", title: "AVE2 — Avaliação Escrita", type: "prova" },
+    { d: "17/06", disc: "Clínica Médica", title: "AVP2 — Prova Prática", type: "final" },
 
-// ── Build timeline: one tick per day-of-month boundary in range ──
-// We'll use monthly ticks: Feb=0, Mar=1, Apr=2, May=3, Jun=4 + end-of-Jun
-const MONTHS = [
-  { label: 'Fev', m: 2, d: 1 },
-  { label: 'Mar', m: 3, d: 1 },
-  { label: 'Abr', m: 4, d: 1 },
-  { label: 'Mai', m: 5, d: 1 },
-  { label: 'Jun', m: 6, d: 1 },
-];
+    // GINECOLOGIA (Subgrupos viram texto no título para simplificar)
+    { d: "10/04", disc: "Ginecologia", title: "B1 — Hac GO", type: "pratica" },
+    { d: "13/04", disc: "Ginecologia", title: "AV1", type: "prova" },
+    { d: "22/06", disc: "Ginecologia", title: "AV2 Final", type: "final" },
 
-// Slider works in "days since Feb 1"
-const START_DATE = new Date(2025, 1, 1);  // Feb 1
-const END_DATE   = new Date(2025, 5, 30); // Jun 30
+    // PEDIATRIA
+    { d: "16/06", disc: "Pediatria", title: "OSCE", type: "prova" }
+  ]
+};
 
-function dayOffset(date) {
-  return Math.round((date - START_DATE) / 86400000);
-}
-function offsetToDate(offset) {
-  return new Date(START_DATE.getTime() + offset * 86400000);
-}
+/**
+ * ─── LÓGICA DA APLICAÇÃO (NÃO PRECISA EDITAR) ───
+ */
 
-const MAX_OFFSET = dayOffset(END_DATE); // ~149
-
-// Presets
-const PRESETS = [
-  { label: 'Tudo',     minD: new Date(2025,1,1),  maxD: new Date(2025,5,30) },
-  { label: 'Fev–Mar',  minD: new Date(2025,1,1),  maxD: new Date(2025,2,31) },
-  { label: 'Abril',    minD: new Date(2025,3,1),  maxD: new Date(2025,3,30) },
-  { label: 'Maio',     minD: new Date(2025,4,1),  maxD: new Date(2025,4,31) },
-  { label: 'Junho',    minD: new Date(2025,5,1),  maxD: new Date(2025,5,30) },
-  { label: '1ª Qz Mai',minD: new Date(2025,4,1),  maxD: new Date(2025,4,15) },
-  { label: '2ª Qz Mai',minD: new Date(2025,4,16), maxD: new Date(2025,4,31) },
-  { label: '1ª Qz Jun',minD: new Date(2025,5,1),  maxD: new Date(2025,5,15) },
-  { label: '2ª Qz Jun',minD: new Date(2025,5,16), maxD: new Date(2025,5,30) },
-];
-
-// ── State ──
-let minVal = 0;
-let maxVal = MAX_OFFSET;
-let activeDisc = 'all';
-
-const sliderMin = document.getElementById('sliderMin');
-const sliderMax = document.getElementById('sliderMax');
-const rangeFill = document.getElementById('rangeFill');
-const rangeDisplay = document.getElementById('rangeDisplay');
-
-sliderMin.max = MAX_OFFSET;
-sliderMax.max = MAX_OFFSET;
-sliderMin.value = 0;
-sliderMax.value = MAX_OFFSET;
-
-// ── Tick marks ──
-function buildTicks() {
-  const row = document.getElementById('tickRow');
-  row.innerHTML = '';
-  MONTHS.forEach(({ label, m }) => {
-    const el = document.createElement('div');
-    el.className = 'tick';
-    el.dataset.month = m;
-    el.textContent = label;
-    row.appendChild(el);
-  });
-}
-
-function updateTicks() {
-  const minDate = offsetToDate(minVal);
-  const maxDate = offsetToDate(maxVal);
-  document.querySelectorAll('.tick').forEach(el => {
-    const m = parseInt(el.dataset.month);
-    const mStart = new Date(2025, m - 1, 1);
-    const mEnd   = new Date(2025, m, 0);
-    const overlap = mStart <= maxDate && mEnd >= minDate;
-    el.classList.toggle('in-range', overlap);
-  });
-}
-
-function updateFill() {
-  const pMin = (minVal / MAX_OFFSET) * 100;
-  const pMax = (maxVal / MAX_OFFSET) * 100;
-  rangeFill.style.left  = pMin + '%';
-  rangeFill.style.width = (pMax - pMin) + '%';
-}
-
-function updateDisplay() {
-  const a = offsetToDate(minVal);
-  const b = offsetToDate(maxVal);
-  rangeDisplay.textContent = fmt(a) + ' → ' + fmt(b);
-}
-
-function syncSliders() {
-  minVal = Math.min(parseInt(sliderMin.value), parseInt(sliderMax.value) - 1);
-  maxVal = Math.max(parseInt(sliderMax.value), parseInt(sliderMin.value) + 1);
-  sliderMin.value = minVal;
-  sliderMax.value = maxVal;
-  updateFill();
-  updateDisplay();
-  updateTicks();
-  updatePresets();
-  render();
-}
-
-sliderMin.addEventListener('input', syncSliders);
-sliderMax.addEventListener('input', syncSliders);
-
-// ── Presets ──
-function buildPresets() {
-  const row = document.getElementById('presetRow');
-  row.innerHTML = '';
-  PRESETS.forEach((p, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'preset-btn';
-    btn.textContent = p.label;
-    btn.dataset.idx = i;
-    btn.onclick = () => {
-      sliderMin.value = dayOffset(p.minD);
-      sliderMax.value = dayOffset(p.maxD);
-      syncSliders();
+class App {
+  constructor() {
+    this.events = [];
+    this.startDate = new Date(CONFIG.semesterStart);
+    this.endDate = new Date(CONFIG.semesterEnd);
+    this.totalDays = Math.ceil((this.endDate - this.startDate) / (1000 * 60 * 60 * 24));
+    
+    this.state = {
+      minVal: 0,
+      maxVal: this.totalDays,
+      activeDisc: 'Todas',
+      searchTerm: ''
     };
-    row.appendChild(btn);
-  });
-}
 
-function updatePresets() {
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    const p = PRESETS[parseInt(btn.dataset.idx)];
-    const pMin = dayOffset(p.minD);
-    const pMax = dayOffset(p.maxD);
-    btn.classList.toggle('active', pMin === minVal && pMax === maxVal);
-  });
-}
-
-// ── Discipline filter ──
-function buildDiscFilter() {
-  const row = document.getElementById('discFilterRow');
-  row.innerHTML = '';
-  [{ id: 'all', label: 'Todas' }, ...DISCIPLINES].forEach(d => {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn' + (activeDisc === d.id ? ' active-disc' : '');
-    btn.textContent = d.label;
-    btn.onclick = () => { activeDisc = d.id; render(); };
-    row.appendChild(btn);
-  });
-}
-
-// ── Helpers ──
-function rowClass(type) {
-  if (type === 'exam')     return 'row-exam';
-  if (type === 'final')    return 'row-final';
-  if (type === 'practice') return 'row-practice';
-  return 'row-task';
-}
-
-function inRange(dateStr) {
-  const d = parseDMY(dateStr);
-  const minD = offsetToDate(minVal);
-  const maxD = offsetToDate(maxVal);
-  return d >= minD && d <= maxD;
-}
-
-function makeEventRow(ev) {
-  const row = document.createElement('div');
-  row.className = 'event-row ' + rowClass(ev.type);
-  const badge = document.createElement('div');
-  badge.className = 'date-badge';
-  badge.textContent = ev.date;
-  const label = document.createElement('div');
-  label.className = 'event-label';
-  label.textContent = ev.label;
-  row.appendChild(badge);
-  row.appendChild(label);
-  return row;
-}
-
-function getDiscEvents(disc) {
-  if (disc.subgroups) return disc.subgroups.flatMap(sg => sg.events.map(e => ({ ...e, sublabel: sg.sublabel })));
-  return disc.events || [];
-}
-
-// ── Render ──
-function render() {
-  // rebuild discipline buttons (to reflect activeDisc)
-  buildDiscFilter();
-
-  const content = document.getElementById('content');
-  content.innerHTML = '';
-
-  const disciplines = activeDisc === 'all' ? DISCIPLINES : DISCIPLINES.filter(d => d.id === activeDisc);
-
-  let totalCount = 0;
-
-  disciplines.forEach((disc, di) => {
-    if (disc.subgroups) {
-      disc.subgroups.forEach((sg, sgi) => {
-        const filtered = sg.events
-          .filter(e => inRange(e.date))
-          .sort((a, b) => toSortNum(a.date) - toSortNum(b.date));
-        if (!filtered.length) return;
-        totalCount += filtered.length;
-
-        const block = document.createElement('div');
-        block.className = 'discipline-block';
-        block.style.animationDelay = ((di + sgi) * 0.04) + 's';
-
-        const lbl = document.createElement('div');
-        lbl.className = 'discipline-label';
-        lbl.textContent = sg.sublabel === disc.label ? disc.label : disc.label + ' · ' + sg.sublabel;
-        block.appendChild(lbl);
-
-        filtered.forEach(ev => block.appendChild(makeEventRow(ev)));
-        content.appendChild(block);
-      });
-    } else {
-      const filtered = (disc.events || [])
-        .filter(e => inRange(e.date))
-        .sort((a, b) => toSortNum(a.date) - toSortNum(b.date));
-      if (!filtered.length) return;
-      totalCount += filtered.length;
-
-      const block = document.createElement('div');
-      block.className = 'discipline-block';
-      block.style.animationDelay = (di * 0.04) + 's';
-
-      const lbl = document.createElement('div');
-      lbl.className = 'discipline-label';
-      lbl.textContent = disc.label;
-      block.appendChild(lbl);
-
-      filtered.forEach(ev => block.appendChild(makeEventRow(ev)));
-      content.appendChild(block);
-    }
-  });
-
-  if (!content.children.length) {
-    content.innerHTML = '<div class="empty">Nenhuma atividade no período selecionado.</div>';
+    this.init();
   }
 
-  document.getElementById('countNum').textContent = totalCount;
+  init() {
+    // 1. Setup UI Texts
+    document.getElementById('appTitle').innerText = CONFIG.title;
+    document.getElementById('appSubtitle').innerText = CONFIG.subtitle;
+
+    // 2. Parse Data
+    this.events = CONFIG.data.map(item => {
+      const [day, month] = item.d.split('/').map(Number);
+      const dateObj = new Date(CONFIG.year, month - 1, day);
+      return { ...item, dateObj, sortTime: dateObj.getTime() };
+    }).sort((a, b) => a.sortTime - b.sortTime);
+
+    // 3. Setup Controls
+    this.setupFilters();
+    this.setupSlider();
+    this.setupSearch();
+
+    // 4. Initial Render
+    this.render();
+  }
+
+  setupFilters() {
+    const uniqueDiscs = ['Todas', ...new Set(this.events.map(e => e.disc))];
+    const container = document.getElementById('disciplineFilters');
+    
+    uniqueDiscs.forEach(disc => {
+      const btn = document.createElement('button');
+      btn.className = `tag ${disc === 'Todas' ? 'active' : ''}`;
+      btn.textContent = disc;
+      btn.onclick = () => {
+        this.state.activeDisc = disc;
+        document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        this.render();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  setupSlider() {
+    const minSlider = document.getElementById('sliderMin');
+    const maxSlider = document.getElementById('sliderMax');
+    
+    [minSlider, maxSlider].forEach(el => {
+      el.min = 0;
+      el.max = this.totalDays;
+      el.oninput = () => this.handleSlider(minSlider, maxSlider);
+    });
+    minSlider.value = 0;
+    maxSlider.value = this.totalDays;
+    
+    this.handleSlider(minSlider, maxSlider); // Init visuals
+  }
+
+  handleSlider(minEl, maxEl) {
+    let min = parseInt(minEl.value);
+    let max = parseInt(maxEl.value);
+
+    // Prevent cross-over
+    if (min > max - 1) {
+      if (event.target === minEl) minEl.value = max - 1;
+      else maxEl.value = min + 1;
+    }
+    
+    this.state.minVal = parseInt(minEl.value);
+    this.state.maxVal = parseInt(maxEl.value);
+
+    // Update Visuals
+    const percentMin = (this.state.minVal / this.totalDays) * 100;
+    const percentMax = (this.state.maxVal / this.totalDays) * 100;
+    document.getElementById('rangeFill').style.left = percentMin + "%";
+    document.getElementById('rangeFill').style.width = (percentMax - percentMin) + "%";
+
+    // Update Label
+    const d1 = this.getDateFromOffset(this.state.minVal);
+    const d2 = this.getDateFromOffset(this.state.maxVal);
+    document.getElementById('dateRangeLabel').innerText = 
+      `${this.formatDateShort(d1)} - ${this.formatDateShort(d2)}`;
+
+    this.render();
+  }
+
+  setupSearch() {
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      this.state.searchTerm = e.target.value.toLowerCase();
+      this.render();
+    });
+  }
+
+  getDateFromOffset(offset) {
+    const d = new Date(this.startDate);
+    d.setDate(d.getDate() + offset);
+    return d;
+  }
+
+  formatDateShort(date) {
+    return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(date);
+  }
+  
+  formatDateBox(date) {
+    const d = date.getDate().toString().padStart(2, '0');
+    const m = new Intl.DateTimeFormat('pt-BR', { month: 'short' }).format(date).replace('.', '');
+    return { day: d, month: m };
+  }
+
+  render() {
+    const container = document.getElementById('eventsContainer');
+    container.innerHTML = '';
+
+    // Date Filters
+    const rangeStart = this.getDateFromOffset(this.state.minVal);
+    const rangeEnd = this.getDateFromOffset(this.state.maxVal);
+
+    // Apply Logic
+    const filtered = this.events.filter(ev => {
+      const inDate = ev.dateObj >= rangeStart && ev.dateObj <= rangeEnd;
+      const inDisc = this.state.activeDisc === 'Todas' || ev.disc === this.state.activeDisc;
+      const inSearch = ev.title.toLowerCase().includes(this.state.searchTerm) || 
+                       ev.disc.toLowerCase().includes(this.state.searchTerm);
+      return inDate && inDisc && inSearch;
+    });
+
+    // Render Logic
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="empty-state">Nenhum evento encontrado para este filtro.</div>`;
+      document.getElementById('countDisplay').innerText = "0";
+      return;
+    }
+
+    // Grouping by Discipline for cleaner view
+    // (Optional: remove this reduce to show a pure chronological list)
+    const grouped = {}; 
+    // Just sorting chronologically is usually better for "Calendars", 
+    // but the user liked groups. Let's do a simple chronological list 
+    // but with discipline tags, it's more modern.
+    
+    filtered.forEach(ev => {
+      const { day, month } = this.formatDateBox(ev.dateObj);
+      
+      const el = document.createElement('div');
+      el.className = `event-card type-${ev.type}`;
+      el.innerHTML = `
+        <div class="date-box">
+          ${day}
+          <span>${month}</span>
+        </div>
+        <div class="info-box">
+          <div class="event-name">${ev.title}</div>
+          <div class="event-disc">${ev.disc}</div>
+        </div>
+        <div class="type-indicator" title="${ev.type}"></div>
+      `;
+      container.appendChild(el);
+    });
+
+    document.getElementById('countDisplay').innerText = filtered.length;
+  }
 }
 
-// ── Init ──
-buildTicks();
-buildPresets();
-syncSliders();
+// Start
+window.onload = () => new App();
+
 </script>
 </body>
 </html>
