@@ -1,0 +1,56 @@
+.event-list { display: flex; flex-direction: column; gap: 0.8rem; padding-bottom: 2rem; }
+
+.event-card {
+    display: grid; grid-template-columns: 70px 1fr auto; align-items: stretch;
+    background: var(--card-bg); border-radius: 12px; overflow: hidden;
+    border: 1px solid transparent; cursor: default;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background var(--transition);
+    opacity: 0; transform: translateY(15px);
+    animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.event-card:hover { 
+    transform: translateY(-3px) scale(1.005); 
+    background: rgba(255, 255, 255, 0.05); 
+    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); 
+}
+
+.date-box {
+    background: rgba(0,0,0,0.2); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 0 10px;
+    font-size: 1.1rem; font-weight: 800; line-height: 1; color: var(--text-muted);
+}
+.date-box span { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
+
+.info-box { padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; }
+.event-name { font-weight: 700; font-size: 1rem; margin-bottom: 4px; color: var(--text-main); }
+.event-disc { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.type-indicator { width: 5px; height: 100%; transition: background var(--transition); }
+
+/* Semantic Colors */
+.type-prova .date-box { color: var(--danger); background: rgba(239, 68, 68, 0.15); }
+.type-prova .type-indicator { background: var(--danger); }
+
+.type-pratica .date-box { color: var(--success); background: rgba(16, 185, 129, 0.15); }
+.type-pratica .type-indicator { background: var(--success); }
+
+.type-trabalho .date-box { color: var(--info); background: rgba(59, 130, 246, 0.15); }
+.type-trabalho .type-indicator { background: var(--info); }
+
+.type-final .date-box { color: var(--warning); background: rgba(245, 158, 11, 0.15); }
+.type-final .type-indicator { background: var(--warning); }
+
+/* Animation */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
+
+/* Mobile */
+@media (max-width: 480px) {
+    .event-card { grid-template-columns: 65px 1fr; }
+    .type-indicator { display: none; }
+    .date-box { border-right: 2px solid transparent; }
+    .type-prova .date-box { border-right-color: var(--danger); }
+    .type-pratica .date-box { border-right-color: var(--success); }
+    .type-trabalho .date-box { border-right-color: var(--info); }
+    .type-final .date-box { border-right-color: var(--warning); }
+}
