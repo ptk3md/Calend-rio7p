@@ -3,30 +3,21 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Calendário de Atividades</title>
+<title>Calendário Acadêmico 2026</title>
 <link rel="icon" href="data:,">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  /* ─── VARIÁVEIS & TEMAS ─── */
+  /* ─── VARIÁVEIS ─── */
   :root {
     --bg-color: #0f172a;
-    --bg-gradient-1: rgba(59, 130, 246, 0.08);
-    --bg-gradient-2: rgba(239, 68, 68, 0.05);
-    
     --card-bg: rgba(30, 41, 59, 0.7);
     --card-hover: rgba(255, 255, 255, 0.05);
     --card-border: rgba(255, 255, 255, 0.08);
-    
     --text-main: #f1f5f9;
     --text-muted: #94a3b8;
-    --text-inverse: #0f172a;
-    
     --accent: #3b82f6;
-    --accent-glow: rgba(59, 130, 246, 0.3);
-    
     --tag-bg: rgba(255,255,255,0.05);
     --tag-bg-active: var(--accent);
-    
     --input-bg: rgba(0,0,0,0.2);
     
     /* Status Colors */
@@ -42,14 +33,11 @@
 
   [data-theme="light"] {
     --bg-color: #f0f4f8;
-    --bg-gradient-1: rgba(59, 130, 246, 0.05);
-    --bg-gradient-2: rgba(239, 68, 68, 0.05);
     --card-bg: rgba(255, 255, 255, 0.65);
     --card-hover: rgba(255, 255, 255, 0.9);
     --card-border: rgba(0, 0, 0, 0.06);
     --text-main: #1e293b;
     --text-muted: #64748b;
-    --text-inverse: #ffffff;
     --tag-bg: rgba(0,0,0,0.05);
     --input-bg: rgba(255,255,255,0.5);
     --accent: #2563eb;
@@ -60,116 +48,102 @@
   body {
     font-family: var(--font);
     background-color: var(--bg-color);
-    background-image: 
-      radial-gradient(circle at 15% 50%, var(--bg-gradient-1), transparent 25%),
-      radial-gradient(circle at 85% 30%, var(--bg-gradient-2), transparent 25%);
     color: var(--text-main);
     min-height: 100vh;
     padding: 2rem 1rem;
+    padding-top: 3rem; /* Espaço para barra de progresso */
     transition: background-color var(--transition), color var(--transition);
   }
 
   .container { max-width: 720px; margin: 0 auto; position: relative; }
 
-  /* ─── HEADER ─── */
-  header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; }
-  h1 { 
-    font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 0.5rem;
-    background: linear-gradient(to right, var(--text-main), var(--text-muted));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  /* 4. BARRA DE PROGRESSO DO SEMESTRE */
+  .progress-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 6px;
+    background: var(--tag-bg); z-index: 1000;
   }
-  .subtitle { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .progress-bar {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--success));
+    width: 0%; transition: width 1s ease-out;
+    box-shadow: 0 0 10px var(--accent);
+  }
+  .progress-label {
+    position: fixed; top: 10px; right: 10px; font-size: 0.7rem; 
+    font-weight: 700; color: var(--text-muted); z-index: 1001;
+    background: var(--card-bg); padding: 4px 8px; border-radius: 8px;
+    border: 1px solid var(--card-border); backdrop-filter: blur(4px);
+  }
+
+  /* HEADER & CONTROLS */
+  header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; }
+  h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
+  .subtitle { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; }
 
   .theme-toggle {
     background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main);
-    width: 44px; height: 44px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; cursor: pointer;
-    transition: var(--transition); backdrop-filter: blur(8px);
+    width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: var(--transition);
   }
-  .theme-toggle:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-  
-  /* AJUSTE DO ÍCONE FEITO AQUI (18px) */
-  .theme-toggle svg { width: 18px; height: 18px; stroke-width: 2; }
+  .theme-toggle svg { width: 18px; height: 18px; }
 
-  /* ─── CONTROLS ─── */
   .controls {
     background: var(--card-bg); border: 1px solid var(--card-border);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border-radius: var(--radius); padding: 1.5rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.05); margin-bottom: 2rem;
-    transition: background var(--transition);
+    backdrop-filter: blur(12px); border-radius: var(--radius); padding: 1.5rem;
+    margin-bottom: 2rem;
   }
-
-  .top-tools { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-  .search-box { flex: 1; position: relative; min-width: 200px; }
+  .top-tools { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+  .search-box { flex: 1; position: relative; }
   .search-box input {
     width: 100%; background: var(--input-bg); border: 1px solid var(--card-border);
     color: var(--text-main); padding: 12px 12px 12px 40px; border-radius: 10px;
-    font-size: 0.9rem; transition: var(--transition); font-family: var(--font); font-weight: 500;
+    font-family: var(--font); font-weight: 500;
   }
-  .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); background: var(--card-bg); }
-  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px; height: 18px; pointer-events: none; }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px; }
 
   .filter-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; }
   .tag {
     background: var(--tag-bg); border: 1px solid var(--card-border); color: var(--text-muted);
     padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-    cursor: pointer; transition: all 0.2s; user-select: none;
+    cursor: pointer; transition: all 0.2s;
   }
-  .tag:hover { background: var(--card-border); color: var(--text-main); transform: translateY(-1px); }
   .tag.active { background: var(--tag-bg-active); color: white; transform: scale(1.05); }
 
-  .slider-container { margin-top: 1.8rem; padding: 0 0.5rem; }
-  .slider-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 700; text-transform: uppercase; }
-  .slider-date-display { color: var(--accent); }
-
-  .range-wrapper { position: relative; height: 6px; background: var(--tag-bg); border-radius: 10px; margin: 10px 0; }
-  .range-fill { position: absolute; height: 100%; background: var(--accent); border-radius: 10px; z-index: 1; }
-  .range-input { position: absolute; top: -7px; width: 100%; height: 20px; appearance: none; background: transparent; pointer-events: none; z-index: 2; }
-  .range-input::-webkit-slider-thumb {
-    appearance: none; pointer-events: all; width: 20px; height: 20px; background: #fff;
-    border: 2px solid var(--accent); border-radius: 50%; cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-top: 1px;
-    transition: transform 0.2s;
+  /* 2. STICKY HEADERS (MÊS) */
+  .month-header {
+    position: sticky; top: 0px; z-index: 10;
+    background: var(--bg-color); /* Fallback */
+    backdrop-filter: blur(10px);
+    padding: 10px 0; margin-bottom: 10px;
+    font-size: 1.1rem; font-weight: 800; color: var(--accent);
+    border-bottom: 1px solid var(--card-border);
+    text-transform: capitalize;
   }
-  .range-input::-webkit-slider-thumb:hover { transform: scale(1.3); }
 
-  /* ─── LISTA ─── */
+  /* LISTA & CARDS */
   .event-list { display: flex; flex-direction: column; gap: 0.8rem; padding-bottom: 1rem; }
   
   .event-card {
     display: grid; grid-template-columns: 70px 1fr auto; align-items: stretch;
     background: var(--card-bg); border-radius: 12px; overflow: hidden;
-    border: 1px solid transparent; cursor: default;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background var(--transition);
-    opacity: 0; transform: translateY(15px);
-    animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    border: 1px solid transparent; cursor: default; position: relative;
+    transition: transform 0.2s, background 0.3s;
   }
-  .event-card:hover { transform: translateY(-3px) scale(1.005); background: var(--card-hover); border-color: var(--card-border); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); z-index: 2; }
-
-  /* Estilos específicos para cards passados (Histórico) */
-  .event-card.is-past {
-    filter: grayscale(0.8);
-    opacity: 0.6 !important; /* Força opacidade mesmo após animação */
-    border-color: transparent;
-  }
-  .event-card.is-past:hover {
-    filter: grayscale(0);
-    opacity: 1 !important;
-  }
+  .event-card:hover { transform: translateY(-3px); background: var(--card-hover); border-color: var(--card-border); z-index: 2; }
 
   .date-box {
     background: var(--input-bg); display: flex; flex-direction: column;
     align-items: center; justify-content: center; padding: 0 10px;
     font-size: 1.1rem; font-weight: 800; line-height: 1; color: var(--text-muted);
   }
-  .date-box span { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
+  .date-box span { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
 
   .info-box { padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; }
-  .event-name { font-weight: 700; font-size: 1rem; margin-bottom: 4px; color: var(--text-main); }
+  
+  .card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .event-name { font-weight: 700; font-size: 1rem; color: var(--text-main); }
   .event-disc { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  .type-indicator { width: 5px; height: 100%; transition: background var(--transition); }
+  .type-indicator { width: 5px; height: 100%; }
   
   /* Cores Tipos */
   .type-prova .date-box { color: var(--danger); background: rgba(239, 68, 68, 0.15); }
@@ -181,66 +155,52 @@
   .type-final .date-box { color: var(--warning); background: rgba(245, 158, 11, 0.15); }
   .type-final .type-indicator { background: var(--warning); }
 
-  /* ─── ARQUIVO / HISTÓRICO ─── */
-  .archive-section {
-    margin-top: 2rem;
-    border-top: 1px dashed var(--card-border);
-    padding-top: 2rem;
+  /* 1. BADGES DE URGÊNCIA */
+  .badge {
+    font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+    letter-spacing: 0.05em; margin-left: 10px; text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  
-  .archive-header {
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1.5rem;
-  }
+  .badge-today { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
+  .badge-soon { background: var(--warning); color: #000; }
+  .badge-normal { background: var(--card-border); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); }
 
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+  /* 3. BOTÃO CALENDÁRIO */
+  .actions { padding: 0 10px; display: flex; align-items: center; justify-content: center; }
+  .btn-add-cal {
+    background: transparent; border: none; color: var(--text-muted);
+    cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.2s;
+  }
+  .btn-add-cal:hover { background: var(--tag-bg); color: var(--accent); transform: scale(1.1); }
+  .btn-add-cal svg { width: 20px; height: 20px; }
+
+  /* 5. SKELETON LOADING */
+  .skeleton {
+    background: linear-gradient(90deg, var(--card-border) 25%, var(--card-hover) 50%, var(--card-border) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 6px;
+  }
+  .sk-card { height: 74px; border-radius: 12px; margin-bottom: 10px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* ARQUIVO */
+  .archive-section { margin-top: 2rem; border-top: 1px dashed var(--card-border); padding-top: 2rem; }
   .btn-archive-toggle {
-    background: var(--tag-bg); color: var(--text-muted);
-    border: 1px solid var(--card-border);
-    padding: 10px 24px; border-radius: 99px;
-    font-family: var(--font); font-size: 0.85rem; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-    display: flex; align-items: center; gap: 8px;
+    background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--card-border);
+    padding: 10px 24px; border-radius: 99px; font-size: 0.85rem; font-weight: 700;
+    cursor: pointer; width: 100%; transition: 0.2s;
   }
-  .btn-archive-toggle:hover {
-    background: var(--card-hover); color: var(--text-main); transform: translateY(-2px);
-  }
-  .btn-archive-toggle .count-badge {
-    background: var(--card-bg); padding: 2px 8px; border-radius: 10px; font-size: 0.75rem;
-  }
-  .btn-archive-toggle.open {
-    background: var(--accent); color: white; border-color: var(--accent);
-  }
-  .btn-archive-toggle.open .count-badge { color: var(--accent); background: white; }
-
-  .archive-list {
-    display: none; /* Escondido por padrão */
-    flex-direction: column; gap: 0.8rem;
-    padding-bottom: 3rem;
-  }
-  .archive-list.visible { display: flex; animation: fadeIn 0.3s ease; }
-
-  .status-bar { margin-top: 1rem; text-align: center; font-size: 0.8rem; color: var(--text-muted); background: var(--tag-bg); padding: 8px 16px; border-radius: 99px; display: inline-block; }
-  .counter { color: var(--text-main); font-weight: 800; margin-right: 4px; }
-  
-  .empty-state { text-align: center; padding: 4rem 1rem; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
-  
-  @keyframes fadeInUp { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-  @media (max-width: 480px) {
-    h1 { font-size: 1.6rem; }
-    .controls { padding: 1.2rem; }
-    .event-card { grid-template-columns: 65px 1fr; }
-    .type-indicator { display: none; }
-    .date-box { border-right: 2px solid transparent; }
-    .type-prova .date-box { border-right-color: var(--danger); }
-    .type-pratica .date-box { border-right-color: var(--success); }
-    .type-trabalho .date-box { border-right-color: var(--info); }
-    .type-final .date-box { border-right-color: var(--warning); }
-  }
+  .btn-archive-toggle:hover { background: var(--card-hover); color: var(--text-main); }
+  .event-card.is-past { filter: grayscale(1); opacity: 0.5; }
 </style>
 </head>
 <body>
+
+<div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+<div class="progress-label" id="progressLabel">0%</div>
 
 <div class="container">
   <header>
@@ -248,113 +208,89 @@
       <h1 id="appTitle">Calendário</h1>
       <div class="subtitle" id="appSubtitle">Carregando...</div>
     </div>
-    <button class="theme-toggle" id="themeBtn" aria-label="Alternar tema">
-      <svg class="icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:block"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-      <svg class="icon-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-    </button>
+    <button class="theme-toggle" id="themeBtn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg></button>
   </header>
 
   <div class="controls">
     <div class="top-tools">
       <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar..." autocomplete="off">
         <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        <input type="text" id="searchInput" placeholder="Buscar matéria, exame..." autocomplete="off">
       </div>
     </div>
     <div class="filter-tags" id="disciplineFilters"></div>
-    <div class="slider-container">
-      <div class="slider-info"><span>Intervalo</span><span class="slider-date-display" id="dateRangeLabel">--</span></div>
-      <div class="range-wrapper">
-        <div class="range-fill" id="rangeFill"></div>
-        <input type="range" class="range-input" id="sliderMin" step="1">
-        <input type="range" class="range-input" id="sliderMax" step="1">
-      </div>
-    </div>
   </div>
 
   <main id="eventsContainer" class="event-list"></main>
   
-  <div style="text-align: center;">
-    <div class="status-bar">Atividades pendentes: <span class="counter" id="countDisplay">0</span></div>
-  </div>
-
   <div class="archive-section" id="archiveSection" style="display: none;">
-    <div class="archive-header">
-        <button class="btn-archive-toggle" id="btnToggleArchive">
-            <span>Ver Atividades Concluídas</span>
-            <span class="count-badge" id="archiveCount">0</span>
-        </button>
-    </div>
-    <div id="archiveContainer" class="archive-list"></div>
+    <button class="btn-archive-toggle" id="btnToggleArchive">Ver Histórico (<span id="archiveCount">0</span>)</button>
+    <div id="archiveContainer" class="event-list" style="margin-top: 15px; display: none;"></div>
   </div>
-
 </div>
 
 <script src="data.js"></script>
 
 <script>
-if (typeof EXTERNAL_CONFIG === 'undefined') {
-    alert("ERRO: O arquivo 'data.js' não foi carregado.");
-}
+if (typeof EXTERNAL_CONFIG === 'undefined') alert("Erro: data.js não carregado.");
 const CONFIG = EXTERNAL_CONFIG;
 
 class App {
   constructor() {
     this.events = [];
-    this.startDate = new Date(CONFIG.semesterStart);
-    this.endDate = new Date(CONFIG.semesterEnd);
-    this.totalDays = Math.ceil((this.endDate - this.startDate) / (1000 * 60 * 60 * 24));
+    this.today = new Date(); this.today.setHours(0,0,0,0);
+    this.state = { activeDisc: 'Todas', searchTerm: '', isArchiveOpen: false };
     
-    // Normalizar o "Hoje" para meia-noite
-    this.today = new Date();
-    this.today.setHours(0,0,0,0);
-
-    // Estado da Aplicação
-    this.state = { 
-        minVal: 0, 
-        maxVal: this.totalDays, 
-        activeDisc: 'Todas', 
-        searchTerm: '',
-        isArchiveOpen: false
-    };
-    this.init();
+    // Inicia com Skeleton Loading
+    this.renderSkeleton();
+    setTimeout(() => this.init(), 800); // 800ms delay para simular loading
   }
 
   init() {
-    document.getElementById('appTitle').innerText = CONFIG.title;
-    document.getElementById('appSubtitle').innerText = CONFIG.subtitle;
-    
-    // Processamento Inicial
+    // 1. Processar Dados
     this.events = CONFIG.data.map(item => {
-      const [day, month] = item.d.split('/').map(Number);
-      const dateObj = new Date(CONFIG.year, month - 1, day);
+      const [d, m] = item.d.split('/').map(Number);
+      const dateObj = new Date(CONFIG.year, m - 1, d);
       return { ...item, dateObj, sortTime: dateObj.getTime() };
     }).sort((a, b) => a.sortTime - b.sortTime);
 
+    document.getElementById('appTitle').innerText = CONFIG.title;
+    document.getElementById('appSubtitle').innerText = CONFIG.subtitle;
+
     this.setupTheme();
     this.setupFilters();
-    this.setupSlider();
     this.setupSearch();
     this.setupArchive();
+    this.updateProgress(); // Calcula barra de progresso
     this.render();
+  }
+
+  // ─── 4. BARRA DE PROGRESSO ───
+  updateProgress() {
+    const start = new Date(CONFIG.semesterStart);
+    const end = new Date(CONFIG.semesterEnd);
+    const total = end - start;
+    const current = this.today - start;
+    
+    let pct = Math.floor((current / total) * 100);
+    if (pct < 0) pct = 0; if (pct > 100) pct = 100;
+
+    document.getElementById('progressBar').style.width = `${pct}%`;
+    document.getElementById('progressLabel').innerText = `${pct}% Concluído`;
+  }
+
+  // ─── 5. SKELETON LOADING ───
+  renderSkeleton() {
+    const container = document.getElementById('eventsContainer');
+    container.innerHTML = Array(5).fill('<div class="skeleton sk-card"></div>').join('');
   }
 
   setupTheme() {
     const btn = document.getElementById('themeBtn');
-    const moon = btn.querySelector('.icon-moon');
-    const sun = btn.querySelector('.icon-sun');
-    const saved = localStorage.getItem('theme');
-    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    let isDark = saved ? saved === 'dark' : sysDark;
-
-    const apply = () => {
-      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-      moon.style.display = isDark ? 'none' : 'block';
-      sun.style.display = isDark ? 'block' : 'none';
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    };
+    let isDark = localStorage.getItem('theme') !== 'light';
+    const apply = () => document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
     apply();
-    btn.addEventListener('click', () => { isDark = !isDark; apply(); });
+    btn.addEventListener('click', () => { isDark = !isDark; localStorage.setItem('theme', isDark?'dark':'light'); apply(); });
   }
 
   setupFilters() {
@@ -364,141 +300,145 @@ class App {
       const btn = document.createElement('button');
       btn.className = `tag ${disc === 'Todas' ? 'active' : ''}`;
       btn.textContent = disc;
-      btn.addEventListener('click', (e) => {
+      btn.onclick = (e) => {
         this.state.activeDisc = disc;
         document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
         e.target.classList.add('active');
         this.render();
-      });
+      };
       container.appendChild(btn);
     });
   }
 
-  setupSlider() {
-    const minS = document.getElementById('sliderMin');
-    const maxS = document.getElementById('sliderMax');
-    [minS, maxS].forEach(el => { el.min = 0; el.max = this.totalDays; el.oninput = () => this.handleSlider(minS, maxS); });
-    minS.value = 0; maxS.value = this.totalDays;
-    this.handleSlider(minS, maxS);
-  }
-
-  handleSlider(minEl, maxEl) {
-    let min = parseInt(minEl.value), max = parseInt(maxEl.value);
-    if (min > max - 1) { event.target === minEl ? minEl.value = max - 1 : maxEl.value = min + 1; }
-    this.state.minVal = parseInt(minEl.value);
-    this.state.maxVal = parseInt(maxEl.value);
-    const pMin = (this.state.minVal / this.totalDays) * 100;
-    const pMax = (this.state.maxVal / this.totalDays) * 100;
-    document.getElementById('rangeFill').style.left = pMin + "%";
-    document.getElementById('rangeFill').style.width = (pMax - pMin) + "%";
-    
-    const d1 = this.getDateOffset(this.state.minVal);
-    const d2 = this.getDateOffset(this.state.maxVal);
-    document.getElementById('dateRangeLabel').innerText = `${this.fmtDate(d1)} - ${this.fmtDate(d2)}`;
-    this.render();
-  }
-
   setupSearch() {
-    document.getElementById('searchInput').addEventListener('input', (e) => {
+    document.getElementById('searchInput').oninput = (e) => {
       this.state.searchTerm = e.target.value.toLowerCase();
       this.render();
-    });
+    };
   }
 
   setupArchive() {
     const btn = document.getElementById('btnToggleArchive');
-    btn.addEventListener('click', () => {
+    btn.onclick = () => {
         this.state.isArchiveOpen = !this.state.isArchiveOpen;
         const list = document.getElementById('archiveContainer');
-        
-        if (this.state.isArchiveOpen) {
-            btn.classList.add('open');
-            list.classList.add('visible');
-            btn.querySelector('span').innerText = "Ocultar Concluídas";
-        } else {
-            btn.classList.remove('open');
-            list.classList.remove('visible');
-            btn.querySelector('span').innerText = "Ver Atividades Concluídas";
-        }
-    });
+        list.style.display = this.state.isArchiveOpen ? 'flex' : 'none';
+        btn.innerText = this.state.isArchiveOpen ? "Ocultar Histórico" : `Ver Histórico (${document.getElementById('archiveCount').innerText})`;
+    };
   }
 
-  getDateOffset(off) { const d = new Date(this.startDate); d.setDate(d.getDate() + off); return d; }
-  fmtDate(d) { return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(d); }
-  fmtBox(d) { return { day: d.getDate().toString().padStart(2,'0'), month: new Intl.DateTimeFormat('pt-BR',{month:'short'}).format(d).replace('.','') }; }
+  fmtBox(d) { return { day: d.getDate().toString().padStart(2,'0'), month: d.toLocaleString('pt-BR',{month:'short'}).replace('.','') }; }
 
-  createCard(ev, isPast = false) {
-      const { day, month } = this.fmtBox(ev.dateObj);
-      const el = document.createElement('div');
-      el.className = `event-card type-${ev.type} ${isPast ? 'is-past' : ''}`;
-      if(!isPast) el.style.animationDelay = "0.05s"; 
-      
-      el.innerHTML = `
-        <div class="date-box">${day}<span>${month}</span></div>
-        <div class="info-box">
-          <div class="event-name">${ev.title}</div>
-          <div class="event-disc">${ev.disc}</div>
+  // ─── 3. GERAR ARQUIVO .ICS ───
+  generateICS(ev) {
+    const fmt = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g,"").slice(0,15) + "Z";
+    const start = fmt(ev.dateObj);
+    // Adiciona 1 hora para o fim
+    const endDate = new Date(ev.dateObj); endDate.setHours(endDate.getHours() + 1);
+    const end = fmt(endDate);
+
+    const icsMsg = [
+        "BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT",
+        `DTSTART:${start}`, `DTEND:${end}`,
+        `SUMMARY:${ev.title}`, `DESCRIPTION:${ev.disc} - ${ev.type}`,
+        "END:VEVENT", "END:VCALENDAR"
+    ].join("\n");
+
+    const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', `${ev.title}.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // ─── 1. LÓGICA DE URGÊNCIA ───
+  getUrgency(dateObj) {
+    const diffTime = dateObj - this.today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    if (diffDays === 0) return { text: 'Hoje!', class: 'badge-today' };
+    if (diffDays === 1) return { text: 'Amanhã', class: 'badge-soon' };
+    if (diffDays > 1 && diffDays <= 5) return { text: `${diffDays} dias`, class: 'badge-soon' };
+    return null;
+  }
+
+  createCard(ev, isPast) {
+    const { day, month } = this.fmtBox(ev.dateObj);
+    const urgency = !isPast ? this.getUrgency(ev.dateObj) : null;
+    const el = document.createElement('div');
+    el.className = `event-card type-${ev.type} ${isPast ? 'is-past' : ''}`;
+    
+    // Botão Calendar
+    const btnCal = document.createElement('button');
+    btnCal.className = 'btn-add-cal';
+    btnCal.title = "Adicionar ao Calendário";
+    btnCal.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
+    btnCal.onclick = () => this.generateICS(ev);
+
+    el.innerHTML = `
+      <div class="date-box">${day}<span>${month}</span></div>
+      <div class="info-box">
+        <div class="card-top-row">
+           <div class="event-name">${ev.title}</div>
+           ${urgency ? `<div class="badge ${urgency.class}">${urgency.text}</div>` : ''}
         </div>
-        <div class="type-indicator" title="${ev.type}"></div>`;
-      return el;
+        <div class="event-disc">${ev.disc}</div>
+      </div>
+      <div class="type-indicator" title="${ev.type}"></div>
+    `;
+    
+    // Inserir botão de calendário na grid (coluna extra)
+    // Ajustamos css grid para 4 colunas ou usamos absolute? 
+    // Vamos usar a estrutura atual e adicionar o botão no final
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.appendChild(btnCal);
+    el.appendChild(actions);
+
+    return el;
   }
 
   render() {
     const mainContainer = document.getElementById('eventsContainer');
     const archiveContainer = document.getElementById('archiveContainer');
-    const archiveSection = document.getElementById('archiveSection');
     
-    const rStart = this.getDateOffset(this.state.minVal);
-    const rEnd = this.getDateOffset(this.state.maxVal);
-    
-    // 1. Filtragem Base (Texto e Disciplina)
-    const filteredBase = this.events.filter(ev => {
+    // Filtros
+    const filtered = this.events.filter(ev => {
         const inDisc = this.state.activeDisc === 'Todas' || ev.disc === this.state.activeDisc;
-        const inSearch = ev.title.toLowerCase().includes(this.state.searchTerm) || ev.disc.toLowerCase().includes(this.state.searchTerm);
+        const inSearch = ev.title.toLowerCase().includes(this.state.searchTerm);
         return inDisc && inSearch;
     });
 
-    // 2. Separação: Passado vs Futuro/Hoje
-    // isPast se a data for estritamente menor que Hoje (00:00:00)
-    const futureEvents = [];
-    const pastEvents = [];
+    const futureEvents = filtered.filter(ev => ev.dateObj >= this.today);
+    const pastEvents = filtered.filter(ev => ev.dateObj < this.today);
 
-    filteredBase.forEach(ev => {
-        if (ev.dateObj < this.today) {
-            pastEvents.push(ev);
-        } else {
-            // Aplicar filtro de Data do Slider APENAS para eventos futuros
-            if (ev.dateObj >= rStart && ev.dateObj <= rEnd) {
-                futureEvents.push(ev);
-            }
-        }
-    });
-
-    // 3. Atualizar Contadores
-    document.getElementById('countDisplay').innerText = futureEvents.length;
     document.getElementById('archiveCount').innerText = pastEvents.length;
+    document.getElementById('archiveSection').style.display = pastEvents.length > 0 ? 'block' : 'none';
 
-    // 4. Renderizar Principal (Futuro)
+    // Render Principal com Sticky Headers
     mainContainer.innerHTML = '';
     if (futureEvents.length === 0) {
-      mainContainer.innerHTML = `<div class="empty-state"><div style="font-size: 2rem; margin-bottom:10px;">🍃</div>Nenhuma atividade pendente no período.</div>`;
+        mainContainer.innerHTML = `<div class="empty-state">🍃 Nada pendente.</div>`;
     } else {
-      futureEvents.forEach((ev) => {
-        mainContainer.appendChild(this.createCard(ev, false));
-      });
+        // ─── 2. LOGICA DE STICKY HEADERS ───
+        let currentMonth = '';
+        futureEvents.forEach(ev => {
+            const evMonth = ev.dateObj.toLocaleString('pt-BR', { month: 'long' });
+            if (evMonth !== currentMonth) {
+                currentMonth = evMonth;
+                const header = document.createElement('div');
+                header.className = 'month-header';
+                header.innerText = currentMonth;
+                mainContainer.appendChild(header);
+            }
+            mainContainer.appendChild(this.createCard(ev, false));
+        });
     }
 
-    // 5. Renderizar Arquivo (Passado)
-    // Mostramos a seção se houver itens no histórico
-    if (pastEvents.length > 0) {
-        archiveSection.style.display = 'block';
-        archiveContainer.innerHTML = '';
-        pastEvents.forEach((ev) => {
-            archiveContainer.appendChild(this.createCard(ev, true));
-        });
-    } else {
-        archiveSection.style.display = 'none';
-    }
+    // Render Histórico (Sem headers para simplificar)
+    archiveContainer.innerHTML = '';
+    pastEvents.forEach(ev => archiveContainer.appendChild(this.createCard(ev, true)));
   }
 }
 
