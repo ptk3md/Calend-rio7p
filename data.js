@@ -9,7 +9,7 @@ const EXTERNAL_CONFIG = {
   // Exemplo de dados ajustados para datas futuras em relação a Fev/2026
   data: [
     // --- MARÇO 2026 ---
-    { d: "02/02", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
+    { d: "02/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
     { d: "09/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
     { d: "23/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
     { d: "30/03", disc: "Oftalmologia", title: "P1 — Multimídia", type: "prova" },
