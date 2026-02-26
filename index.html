@@ -8,7 +8,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
-<title>Calendário Acadêmico 2026.1</title>
+<title>Calendário Acadêmico 2026</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -25,7 +25,7 @@
     --tag-bg-active: var(--accent);
     --input-bg: rgba(20, 20, 20, 0.9);
     
-    /* Cores dos Badges (Dark Mode) */
+    /* Cores Badge */
     --badge-today-bg: #ef4444; --badge-today-txt: #fff;
     --badge-soon-bg: #eab308;  --badge-soon-txt: #000;
     --badge-info-bg: rgba(255,255,255,0.1); --badge-info-txt: #ccc;
@@ -35,19 +35,14 @@
   }
 
   [data-theme="light"] {
-    --bg-color: #e5e7eb; 
-    --card-bg: rgba(250, 250, 250, 0.8);
-    --card-hover: rgba(255, 255, 255, 0.95); 
-    --card-border: rgba(0, 0, 0, 0.04);
-    --text-main: #333333; 
-    --text-muted: #666666;
-    --tag-bg: rgba(0,0,0,0.04); 
-    --input-bg: rgba(240, 240, 240, 0.9);
+    --bg-color: #e5e7eb; --card-bg: rgba(250, 250, 250, 0.8);
+    --card-hover: rgba(255, 255, 255, 0.95); --card-border: rgba(0, 0, 0, 0.04);
+    --text-main: #333333; --text-muted: #666666;
+    --tag-bg: rgba(0,0,0,0.04); --input-bg: rgba(240, 240, 240, 0.9);
     --accent: #3b71ca;
-
-    /* Cores dos Badges (Light Mode - Ajustado para contraste) */
+    
     --badge-today-bg: #dc2626; --badge-today-txt: #fff;
-    --badge-soon-bg: #ca8a04;  --badge-soon-txt: #fff; /* Texto branco no amarelo escuro */
+    --badge-soon-bg: #ca8a04;  --badge-soon-txt: #fff;
     --badge-info-bg: rgba(0,0,0,0.05); --badge-info-txt: #555;
   }
 
@@ -74,7 +69,7 @@
   .search-box input { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 12px 12px 12px 40px; border-radius: 10px; font-family: var(--font); font-weight: 500; transition: var(--transition); }
   .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px; }
   .filter-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-  .tag { background: var(--tag-bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+  .tag { background: var(--tag-bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; user-select: none; }
   .tag.active { background: var(--tag-bg-active); color: white; transform: scale(1.05); }
 
   /* LIST & CARDS */
@@ -98,13 +93,11 @@
   .type-final .date-box { color: var(--warning); background: rgba(199, 142, 40, 0.15); } .type-final .type-indicator { background: var(--warning); }
   .type-outros .date-box { color: var(--text-muted); background: rgba(128,128,128,0.1); } .type-outros .type-indicator { background: var(--text-muted); }
 
-  /* BADGES (Ajustados para Light/Dark) */
+  /* BADGES */
   .badge { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.05em; margin-left: 10px; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color var(--transition), color var(--transition); }
-  
   .badge-today { background: var(--badge-today-bg); color: var(--badge-today-txt); animation: pulse 1.5s infinite; }
   .badge-soon { background: var(--badge-soon-bg); color: var(--badge-soon-txt); }
   .badge-info { background: var(--badge-info-bg); color: var(--badge-info-txt); border: 1px solid var(--card-border); }
-
   @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
   
   .actions { padding: 0 10px; display: flex; align-items: center; justify-content: center; }
@@ -141,7 +134,7 @@
   <div class="controls">
     <div class="top-tools">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Buscar..." autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Buscar matéria, exame..." autocomplete="off">
         <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
     </div>
@@ -160,9 +153,8 @@
     const script = document.createElement('script');
     script.src = 'data.js?v=' + new Date().getTime();
     document.body.appendChild(script);
-
-    script.onload = () => { new App(); };
-    script.onerror = () => { alert("Erro ao carregar 'data.js'. Verifique o arquivo."); };
+    script.onload = () => new App();
+    script.onerror = () => alert("Erro ao carregar 'data.js'.");
 </script>
 
 <script>
@@ -222,14 +214,16 @@ class App {
   setupFilters() {
     const uniqueDiscs = ['Todas', ...new Set(this.events.map(e => e.disc))];
     const container = document.getElementById('disciplineFilters');
-    container.innerHTML = ''; 
+    container.innerHTML = '';
     uniqueDiscs.forEach(disc => {
       const btn = document.createElement('button');
       btn.className = `tag ${disc === 'Todas' ? 'active' : ''}`;
       btn.textContent = disc;
       btn.onclick = (e) => {
         this.state.activeDisc = disc;
+        // Limpa classe ativa de todos
         document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+        // Adiciona classe ativa ao botão clicado
         e.target.classList.add('active');
         this.render();
       };
@@ -265,7 +259,6 @@ class App {
     window.open(`https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&sf=true&output=xml`, '_blank');
   }
 
-  // ─── LÓGICA DE URGÊNCIA ATUALIZADA ───
   getUrgency(dateObj) {
     const diffTime = dateObj - this.today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
@@ -273,15 +266,13 @@ class App {
     if (diffDays === 0) return { text: 'Hoje!', class: 'badge-today' };
     if (diffDays === 1) return { text: 'Amanhã', class: 'badge-soon' };
     if (diffDays > 1 && diffDays <= 7) return { text: `${diffDays} dias`, class: 'badge-soon' };
-    // Novo: Badge neutro para os 3 próximos mesmo se longe
     return { text: `${diffDays} dias`, class: 'badge-info' };
   }
 
-  // Recebe o índice para saber se é um dos 3 primeiros
   createCard(ev, isPast, index) {
     const { day, month } = this.fmtBox(ev.dateObj);
     
-    // SÓ mostra badge se: não for passado E for um dos top 3
+    // CORREÇÃO: Badge só aparece se não for passado E estiver no top 3
     let urgency = null;
     if (!isPast && index < 3) {
         urgency = this.getUrgency(ev.dateObj);
@@ -318,7 +309,9 @@ class App {
     
     const filtered = this.events.filter(ev => {
         const inDisc = this.state.activeDisc === 'Todas' || ev.disc === this.state.activeDisc;
-        const inSearch = ev.title.toLowerCase().includes(this.state.searchTerm);
+        // CORREÇÃO: Busca por TÍTULO ou DISCIPLINA
+        const term = this.state.searchTerm;
+        const inSearch = ev.title.toLowerCase().includes(term) || ev.disc.toLowerCase().includes(term);
         return inDisc && inSearch;
     });
 
@@ -342,7 +335,7 @@ class App {
                 header.innerText = currentMonth;
                 mainContainer.appendChild(header);
             }
-            // Passamos o INDEX para controlar o limite de 3 badges
+            // CORREÇÃO: Passa o index para calcular o Top 3
             mainContainer.appendChild(this.createCard(ev, false, index));
         });
     }
