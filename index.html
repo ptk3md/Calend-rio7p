@@ -8,7 +8,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
-<title>Calendário Acadêmico 2026</title>
+<title>Calendário Acadêmico 2026.1</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -25,16 +25,30 @@
     --tag-bg-active: var(--accent);
     --input-bg: rgba(20, 20, 20, 0.9);
     
+    /* Cores dos Badges (Dark Mode) */
+    --badge-today-bg: #ef4444; --badge-today-txt: #fff;
+    --badge-soon-bg: #eab308;  --badge-soon-txt: #000;
+    --badge-info-bg: rgba(255,255,255,0.1); --badge-info-txt: #ccc;
+
     --danger: #cf4c4c; --success: #2ea073; --warning: #c78e28; --info: #4a7abd;
     --radius: 16px; --font: 'Plus Jakarta Sans', sans-serif; --transition: 0.3s ease-in-out;
   }
 
   [data-theme="light"] {
-    --bg-color: #e5e7eb; --card-bg: rgba(250, 250, 250, 0.8);
-    --card-hover: rgba(255, 255, 255, 0.95); --card-border: rgba(0, 0, 0, 0.04);
-    --text-main: #333333; --text-muted: #666666;
-    --tag-bg: rgba(0,0,0,0.04); --input-bg: rgba(240, 240, 240, 0.9);
+    --bg-color: #e5e7eb; 
+    --card-bg: rgba(250, 250, 250, 0.8);
+    --card-hover: rgba(255, 255, 255, 0.95); 
+    --card-border: rgba(0, 0, 0, 0.04);
+    --text-main: #333333; 
+    --text-muted: #666666;
+    --tag-bg: rgba(0,0,0,0.04); 
+    --input-bg: rgba(240, 240, 240, 0.9);
     --accent: #3b71ca;
+
+    /* Cores dos Badges (Light Mode - Ajustado para contraste) */
+    --badge-today-bg: #dc2626; --badge-today-txt: #fff;
+    --badge-soon-bg: #ca8a04;  --badge-soon-txt: #fff; /* Texto branco no amarelo escuro */
+    --badge-info-bg: rgba(0,0,0,0.05); --badge-info-txt: #555;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -82,11 +96,15 @@
   .type-pratica .date-box { color: var(--success); background: rgba(46, 160, 115, 0.15); } .type-pratica .type-indicator { background: var(--success); }
   .type-trabalho .date-box { color: var(--info); background: rgba(74, 122, 189, 0.15); } .type-trabalho .type-indicator { background: var(--info); }
   .type-final .date-box { color: var(--warning); background: rgba(199, 142, 40, 0.15); } .type-final .type-indicator { background: var(--warning); }
+  .type-outros .date-box { color: var(--text-muted); background: rgba(128,128,128,0.1); } .type-outros .type-indicator { background: var(--text-muted); }
 
-  /* EXTRAS */
+  /* BADGES (Ajustados para Light/Dark) */
   .badge { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.05em; margin-left: 10px; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color var(--transition), color var(--transition); }
-  .badge-today { background: var(--danger); color: white; animation: pulse 1.5s infinite; }
-  .badge-soon { background: var(--warning); color: #000; }
+  
+  .badge-today { background: var(--badge-today-bg); color: var(--badge-today-txt); animation: pulse 1.5s infinite; }
+  .badge-soon { background: var(--badge-soon-bg); color: var(--badge-soon-txt); }
+  .badge-info { background: var(--badge-info-bg); color: var(--badge-info-txt); border: 1px solid var(--card-border); }
+
   @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
   
   .actions { padding: 0 10px; display: flex; align-items: center; justify-content: center; }
@@ -139,17 +157,12 @@
 </div>
 
 <script>
-    // Isso força o navegador a baixar o data.js novo a cada reload
     const script = document.createElement('script');
     script.src = 'data.js?v=' + new Date().getTime();
     document.body.appendChild(script);
 
-    script.onload = () => {
-        new App(); // Inicia o app apenas quando os dados chegarem
-    };
-    script.onerror = () => {
-        alert("Erro ao carregar 'data.js'. Verifique se o arquivo existe.");
-    };
+    script.onload = () => { new App(); };
+    script.onerror = () => { alert("Erro ao carregar 'data.js'. Verifique o arquivo."); };
 </script>
 
 <script>
@@ -159,9 +172,7 @@ class App {
     this.today = new Date(); this.today.setHours(0,0,0,0);
     this.state = { activeDisc: 'Todas', searchTerm: '', isArchiveOpen: false };
     
-    // Verifica se os dados carregaram
     if (typeof EXTERNAL_CONFIG === 'undefined') return;
-    
     this.renderSkeleton();
     setTimeout(() => this.init(), 600);
   }
@@ -211,7 +222,7 @@ class App {
   setupFilters() {
     const uniqueDiscs = ['Todas', ...new Set(this.events.map(e => e.disc))];
     const container = document.getElementById('disciplineFilters');
-    container.innerHTML = ''; // Limpa para evitar duplicatas
+    container.innerHTML = ''; 
     uniqueDiscs.forEach(disc => {
       const btn = document.createElement('button');
       btn.className = `tag ${disc === 'Todas' ? 'active' : ''}`;
@@ -254,18 +265,28 @@ class App {
     window.open(`https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&sf=true&output=xml`, '_blank');
   }
 
+  // ─── LÓGICA DE URGÊNCIA ATUALIZADA ───
   getUrgency(dateObj) {
     const diffTime = dateObj - this.today;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    
     if (diffDays === 0) return { text: 'Hoje!', class: 'badge-today' };
     if (diffDays === 1) return { text: 'Amanhã', class: 'badge-soon' };
-    if (diffDays > 1 && diffDays <= 5) return { text: `${diffDays} dias`, class: 'badge-soon' };
-    return null;
+    if (diffDays > 1 && diffDays <= 7) return { text: `${diffDays} dias`, class: 'badge-soon' };
+    // Novo: Badge neutro para os 3 próximos mesmo se longe
+    return { text: `${diffDays} dias`, class: 'badge-info' };
   }
 
-  createCard(ev, isPast) {
+  // Recebe o índice para saber se é um dos 3 primeiros
+  createCard(ev, isPast, index) {
     const { day, month } = this.fmtBox(ev.dateObj);
-    const urgency = !isPast ? this.getUrgency(ev.dateObj) : null;
+    
+    // SÓ mostra badge se: não for passado E for um dos top 3
+    let urgency = null;
+    if (!isPast && index < 3) {
+        urgency = this.getUrgency(ev.dateObj);
+    }
+
     const el = document.createElement('div');
     el.className = `event-card type-${ev.type} ${isPast ? 'is-past' : ''}`;
     
@@ -312,7 +333,7 @@ class App {
         mainContainer.innerHTML = `<div class="empty-state">🍃 Nada pendente.</div>`;
     } else {
         let currentMonth = '';
-        futureEvents.forEach(ev => {
+        futureEvents.forEach((ev, index) => {
             const evMonth = ev.dateObj.toLocaleString('pt-BR', { month: 'long' });
             if (evMonth !== currentMonth) {
                 currentMonth = evMonth;
@@ -321,7 +342,8 @@ class App {
                 header.innerText = currentMonth;
                 mainContainer.appendChild(header);
             }
-            mainContainer.appendChild(this.createCard(ev, false));
+            // Passamos o INDEX para controlar o limite de 3 badges
+            mainContainer.appendChild(this.createCard(ev, false, index));
         });
     }
 
