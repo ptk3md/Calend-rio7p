@@ -4,7 +4,7 @@ const EXTERNAL_CONFIG = {
   semesterStart: '2026-02-09',
   semesterEnd:   '2026-07-01', // Ajustei um pouco o final para margem de segurança
   title: "Calendário Acadêmico",
-  subtitle: "Semestre 2026.17",
+  subtitle: "Semestre 2026.1",
   
   // Exemplo de dados ajustados para datas futuras em relação a Fev/2026
   data: [
