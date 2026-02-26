@@ -2,14 +2,14 @@ const EXTERNAL_CONFIG = {
   // ATUALIZADO PARA 2026
   year: 2026,
   semesterStart: '2026-02-09',
-  semesterEnd:   '2026-07-30', // Ajustei um pouco o final para margem de segurança
+  semesterEnd:   '2026-07-01', // Ajustei um pouco o final para margem de segurança
   title: "Calendário Acadêmico",
   subtitle: "Semestre 2026.1",
   
   // Exemplo de dados ajustados para datas futuras em relação a Fev/2026
   data: [
     // --- MARÇO 2026 ---
-    { d: "02/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
+    { d: "02/02", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
     { d: "09/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
     { d: "23/03", disc: "Ortopedia", title: "Seminário Ortop", type: "trabalho" },
     { d: "30/03", disc: "Oftalmologia", title: "P1 — Multimídia", type: "prova" },
