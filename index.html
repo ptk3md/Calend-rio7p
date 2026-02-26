@@ -87,6 +87,9 @@
     transition: var(--transition); backdrop-filter: blur(8px);
   }
   .theme-toggle:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  
+  /* AJUSTE DO ÍCONE FEITO AQUI (18px) */
+  .theme-toggle svg { width: 18px; height: 18px; stroke-width: 2; }
 
   /* ─── CONTROLS ─── */
   .controls {
@@ -490,8 +493,6 @@ class App {
     if (pastEvents.length > 0) {
         archiveSection.style.display = 'block';
         archiveContainer.innerHTML = '';
-        // Inverter ordem para mostrar o mais recente primeiro no histórico? 
-        // Normalmente histórico é descendente, mas manteremos ascendente por consistência.
         pastEvents.forEach((ev) => {
             archiveContainer.appendChild(this.createCard(ev, true));
         });
