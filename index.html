@@ -212,7 +212,10 @@ class App {
   }
 
   setupFilters() {
-    const uniqueDiscs = ['Todas', ...new Set(this.events.map(e => e.disc))];
+    // AQUI: Filtro para remover 'Início do caos' da lista de botões
+    const uniqueDiscs = ['Todas', ...new Set(this.events.map(e => e.disc))]
+        .filter(d => d !== 'Início do caos');
+        
     const container = document.getElementById('disciplineFilters');
     container.innerHTML = '';
     uniqueDiscs.forEach(disc => {
@@ -221,9 +224,7 @@ class App {
       btn.textContent = disc;
       btn.onclick = (e) => {
         this.state.activeDisc = disc;
-        // Limpa classe ativa de todos
         document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
-        // Adiciona classe ativa ao botão clicado
         e.target.classList.add('active');
         this.render();
       };
@@ -272,7 +273,6 @@ class App {
   createCard(ev, isPast, index) {
     const { day, month } = this.fmtBox(ev.dateObj);
     
-    // CORREÇÃO: Badge só aparece se não for passado E estiver no top 3
     let urgency = null;
     if (!isPast && index < 3) {
         urgency = this.getUrgency(ev.dateObj);
@@ -309,7 +309,6 @@ class App {
     
     const filtered = this.events.filter(ev => {
         const inDisc = this.state.activeDisc === 'Todas' || ev.disc === this.state.activeDisc;
-        // CORREÇÃO: Busca por TÍTULO ou DISCIPLINA
         const term = this.state.searchTerm;
         const inSearch = ev.title.toLowerCase().includes(term) || ev.disc.toLowerCase().includes(term);
         return inDisc && inSearch;
@@ -335,7 +334,6 @@ class App {
                 header.innerText = currentMonth;
                 mainContainer.appendChild(header);
             }
-            // CORREÇÃO: Passa o index para calcular o Top 3
             mainContainer.appendChild(this.createCard(ev, false, index));
         });
     }
