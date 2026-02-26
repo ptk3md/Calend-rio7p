@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Calendário Acadêmico 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0f18;
+    --surface: #111827;
+    --surface2: #161f2e;
+    --border: #1e2d3d;
+    --red: #BD4234;
+    --text: #e8edf5;
+    --text-muted: #4a6080;
+    --text-dim: #6b8aaa;
+    --row-dark: #151e2b;
+    --row-final: #252f3f;
+    --track-h: 4px;
+    --thumb-size: 18px;
+  }
+
+  html { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(ellipse 70% 30% at 50% 0%, rgba(189,66,52,0.06) 0%, transparent 65%), var(--bg);
+  }
+
+  .app { max-width: 700px; margin: 0 auto; padding: 32px 16px 80px; }
+
+  /* ── HEADER ── */
+  .header { margin-bottom: 28px; }
+  .header-title {
+    font-size: 26px; font-weight: 900; letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #e8edf5 40%, #5a7a99);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1;
+  }
+  .header-sub { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* ── FILTER CARD ── */
+  .filter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 20px 18px;
+    margin-bottom: 24px;
+  }
+
+  /* ── SLIDER SECTION ── */
+  .slider-section { margin-bottom: 18px; }
+
+  .slider-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 14px;
+  }
+  .slider-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+  .slider-range-display {
+    font-size: 12px; font-weight: 700; color: var(--red);
+    background: rgba(189,66,52,0.1); border: 1px solid rgba(189,66,52,0.2);
+    padding: 3px 10px; border-radius: 20px; letter-spacing: 0.02em;
+  }
+
+  /* Dual range slider */
+  .range-wrap {
+    position: relative;
+    height: 36px;
+    display: flex; align-items: center;
+  }
+
+  .range-track {
+    position: absolute; left: 0; right: 0;
+    height: var(--track-h);
+    background: var(--border);
+    border-radius: 99px;
+    pointer-events: none;
+  }
+  .range-fill {
+    position: absolute;
+    height: var(--track-h);
+    background: var(--red);
+    border-radius: 99px;
+    pointer-events: none;
+    transition: left 0.05s, width 0.05s;
+  }
+
+  .range-input {
+    position: absolute; left: 0; right: 0;
+    width: 100%;
+    appearance: none; -webkit-appearance: none;
+    background: transparent;
+    height: var(--track-h);
+    outline: none; border: none;
+    pointer-events: none;
+  }
+  .range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: var(--thumb-size); height: var(--thumb-size);
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--red);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    cursor: pointer;
+    pointer-events: all;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .range-input::-webkit-slider-thumb:hover,
+  .range-input:active::-webkit-slider-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 4px rgba(189,66,52,0.25), 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .range-input::-moz-range-thumb {
+    width: var(--thumb-size); height: var(--thumb-size);
+    border-radius: 50%;
+    background: #fff; border: 3px solid var(--red);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    cursor: pointer; pointer-events: all;
+  }
+
+  /* Month tick marks */
+  .tick-row {
+    display: flex; justify-content: space-between;
+    margin-top: 10px; padding: 0 1px;
+  }
+  .tick {
+    font-size: 10px; font-weight: 700; color: var(--text-muted);
+    text-align: center; flex: 1;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .tick.in-range { color: var(--red); }
+
+  /* Quick presets */
+  .presets-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 14px; }
+  .preset-btn {
+    padding: 4px 11px; border-radius: 999px; font-size: 10px; font-weight: 700;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted);
+    cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em; text-transform: uppercase;
+  }
+  .preset-btn:hover { border-color: var(--text-dim); color: var(--text-dim); }
+  .preset-btn.active { background: rgba(189,66,52,0.12); border-color: rgba(189,66,52,0.4); color: var(--red); }
+
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  /* Discipline filter */
+  .filter-group-label { font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .filter-row { display: flex; gap: 5px; flex-wrap: wrap; }
+  .filter-btn {
+    padding: 5px 13px; border-radius: 999px; font-size: 11px; font-weight: 700;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted);
+    cursor: pointer; transition: all 0.18s; white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: #3a5070; color: var(--text-dim); }
+  .filter-btn.active-disc { background: var(--red); border-color: var(--red); color: #fff; }
+
+  /* ── COUNT BADGE ── */
+  .count-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .count-num {
+    background: rgba(189,66,52,0.15); color: var(--red); border: 1px solid rgba(189,66,52,0.3);
+    border-radius: 999px; padding: 1px 9px; font-size: 12px; font-weight: 800;
+  }
+
+  /* ── DISCIPLINE BLOCK ── */
+  .discipline-block { margin-bottom: 22px; animation: fadeUp 0.3s ease both; }
+  .discipline-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 7px; padding-left: 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .discipline-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── EVENT ROW ── */
+  .event-row {
+    display: flex; align-items: stretch;
+    border-radius: 6px; overflow: hidden;
+    margin-bottom: 4px; min-height: 42px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .event-row:hover { transform: translateX(3px); box-shadow: -3px 0 0 var(--red); }
+
+  .date-badge {
+    min-width: 78px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; border-radius: 6px 0 0 6px;
+    padding: 10px 10px; flex-shrink: 0;
+  }
+  .event-label {
+    flex: 1; display: flex; align-items: center;
+    padding: 10px 16px; font-size: 13px; font-weight: 600;
+    letter-spacing: -0.01em; border-radius: 0 6px 6px 0;
+  }
+
+  .row-task     .date-badge { background: #2a3a4f; color: #c8d8e8; }
+  .row-task     .event-label { background: var(--row-dark); color: var(--text); }
+  .row-exam     .date-badge { background: #9e2f27; color: #fff; }
+  .row-exam     .event-label { background: #c8cdd5; color: #1a1a1a; }
+  .row-final    .date-badge { background: #1f2a38; color: #6b8aaa; }
+  .row-final    .event-label { background: var(--row-final); color: #6b8aaa; }
+  .row-practice .date-badge { background: #1a3a30; color: #4ecba0; }
+  .row-practice .event-label { background: #162a22; color: #4ecba0; }
+
+  /* ── EMPTY ── */
+  .empty { text-align: center; padding: 50px 20px; color: var(--text-muted); font-size: 14px; }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px;
+    padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .legend-title { width: 100%; font-size: 9px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px; }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--text-muted); }
+  .legend-swatch { width: 22px; height: 11px; border-radius: 3px; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  @media (max-width: 480px) {
+    .date-badge { min-width: 64px; font-size: 12px; }
+    .event-label { font-size: 12px; padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="header-title">Calendário Acadêmico</div>
+    <div class="header-sub">Semestre 2025 · Avaliações e Atividades</div>
+  </div>
+
+  <div class="filter-card">
+
+    <!-- SLIDER -->
+    <div class="slider-section">
+      <div class="slider-header">
+        <div class="slider-label">Período</div>
+        <div class="slider-range-display" id="rangeDisplay">—</div>
+      </div>
+
+      <div class="range-wrap">
+        <div class="range-track"></div>
+        <div class="range-fill" id="rangeFill"></div>
+        <input type="range" class="range-input" id="sliderMin" min="0" step="1"/>
+        <input type="range" class="range-input" id="sliderMax" min="0" step="1"/>
+      </div>
+
+      <div class="tick-row" id="tickRow"></div>
+
+      <!-- PRESETS -->
+      <div class="presets-row" id="presetRow"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- DISCIPLINE -->
+    <div>
+      <div class="filter-group-label">Disciplina</div>
+      <div class="filter-row" id="discFilterRow"></div>
+    </div>
+  </div>
+
+  <!-- COUNT -->
+  <div class="count-badge">
+    <span class="count-num" id="countNum">0</span>
+    <span>atividades no período</span>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content"></div>
+
+  <div class="legend">
+    <div class="legend-title">Legenda</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#2a3a4f"></div>Atividade / Seminário</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#9e2f27"></div>Avaliação / Prova</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#1a3a30"></div>Prática</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#1f2a38"></div>Prova Final</div>
+  </div>
+</div>
+
+<script>
+// ── ALL DAYS with events, in order ──
+// We build a sorted list of unique day-indices so the slider snaps to real dates.
+
+const DISCIPLINES = [
+  {
+    id: 'ortop', label: 'Ortopedia',
+    events: [
+      { date: '23/02', label: 'Seminário 1', type: 'task' },
+      { date: '02/03', label: 'Seminário 2', type: 'task' },
+      { date: '09/03', label: 'Seminário 3', type: 'task' },
+      { date: '23/03', label: 'Seminário 4', type: 'task' },
+      { date: '30/03', label: 'Seminário 5', type: 'task' },
+      { date: '06/04', label: 'Seminário 6', type: 'task' },
+      { date: '13/04', label: 'Seminário 7', type: 'task' },
+      { date: '20/04', label: 'AVT1 — Avaliação Teórica', type: 'exam' },
+    ]
+  },
+  {
+    id: 'oftalmo', label: 'Oftalmologia',
+    events: [
+      { date: '30/03', label: 'P1 — Multimídia', type: 'exam' },
+      { date: '27/04', label: 'AVT1 — Avaliação Teórica', type: 'exam' },
+      { date: '04/05', label: 'Prática', type: 'practice' },
+      { date: '11/05', label: 'Seminário 1', type: 'task' },
+      { date: '25/05', label: 'Seminário 2', type: 'task' },
+      { date: '01/06', label: 'Prática', type: 'practice' },
+      { date: '08/06', label: 'AVE2 — Avaliação Escrita', type: 'exam' },
+      { date: '15/06', label: 'P2 — Projeto Mídias', type: 'exam' },
+    ]
+  },
+  {
+    id: 'clinica', label: 'Clínica Médica',
+    subgroups: [
+      {
+        sublabel: 'Clínica Médica',
+        events: [
+          { date: '08/04', label: 'AVE1 — Avaliação Escrita', type: 'exam' },
+          { date: '11/06', label: 'AVE2 — Avaliação Escrita', type: 'exam' },
+          { date: '16/06', label: 'AVP2 — início', type: 'exam' },
+          { date: '17/06', label: 'AVP2', type: 'exam' },
+          { date: '18/06', label: 'AVP2', type: 'exam' },
+          { date: '19/06', label: 'AVP2 — fim', type: 'exam' },
+        ]
+      },
+      {
+        sublabel: 'CSR',
+        events: [
+          { date: '15/05', label: 'B2', type: 'exam' },
+          { date: '22/05', label: 'B2', type: 'exam' },
+          { date: '29/05', label: 'B3', type: 'exam' },
+          { date: '05/06', label: 'B3', type: 'exam' },
+          { date: '12/06', label: 'B4', type: 'exam' },
+          { date: '19/06', label: 'B4', type: 'exam' },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'go', label: 'Ginecologia e Obstetrícia',
+    subgroups: [
+      {
+        sublabel: 'GO',
+        events: [
+          { date: '10/04', label: 'B1 — Hac GO', type: 'exam' },
+          { date: '13/04', label: 'AV1', type: 'exam' },
+          { date: '24/04', label: 'B2 — Hac GO', type: 'exam' },
+          { date: '15/05', label: 'B3 — Hac GO', type: 'exam' },
+          { date: '29/05', label: 'B4 — Hac GO', type: 'exam' },
+          { date: '22/06', label: 'AV2', type: 'exam' },
+        ]
+      },
+      {
+        sublabel: 'DPGO',
+        events: [
+          { date: '17/04', label: 'B1', type: 'exam' },
+          { date: '08/05', label: 'B2', type: 'exam' },
+          { date: '22/05', label: 'B3', type: 'exam' },
+          { date: '05/06', label: 'B4', type: 'exam' },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'ped', label: 'Pediatria',
+    events: [
+      { date: '16/06', label: 'OSCE', type: 'exam' },
+    ]
+  },
+];
+
+// ── Date utilities ──
+function parseDMY(str) {
+  const [d, m] = str.split('/').map(Number);
+  return new Date(2025, m - 1, d);
+}
+function toSortNum(str) {
+  const [d, m] = str.split('/').map(Number);
+  return m * 100 + d;
+}
+function fmt(date) {
+  const d = String(date.getDate()).padStart(2, '0');
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  return `${d} ${months[date.getMonth()]}`;
+}
+
+// ── Build timeline: one tick per day-of-month boundary in range ──
+// We'll use monthly ticks: Feb=0, Mar=1, Apr=2, May=3, Jun=4 + end-of-Jun
+const MONTHS = [
+  { label: 'Fev', m: 2, d: 1 },
+  { label: 'Mar', m: 3, d: 1 },
+  { label: 'Abr', m: 4, d: 1 },
+  { label: 'Mai', m: 5, d: 1 },
+  { label: 'Jun', m: 6, d: 1 },
+];
+
+// Slider works in "days since Feb 1"
+const START_DATE = new Date(2025, 1, 1);  // Feb 1
+const END_DATE   = new Date(2025, 5, 30); // Jun 30
+
+function dayOffset(date) {
+  return Math.round((date - START_DATE) / 86400000);
+}
+function offsetToDate(offset) {
+  return new Date(START_DATE.getTime() + offset * 86400000);
+}
+
+const MAX_OFFSET = dayOffset(END_DATE); // ~149
+
+// Presets
+const PRESETS = [
+  { label: 'Tudo',     minD: new Date(2025,1,1),  maxD: new Date(2025,5,30) },
+  { label: 'Fev–Mar',  minD: new Date(2025,1,1),  maxD: new Date(2025,2,31) },
+  { label: 'Abril',    minD: new Date(2025,3,1),  maxD: new Date(2025,3,30) },
+  { label: 'Maio',     minD: new Date(2025,4,1),  maxD: new Date(2025,4,31) },
+  { label: 'Junho',    minD: new Date(2025,5,1),  maxD: new Date(2025,5,30) },
+  { label: '1ª Qz Mai',minD: new Date(2025,4,1),  maxD: new Date(2025,4,15) },
+  { label: '2ª Qz Mai',minD: new Date(2025,4,16), maxD: new Date(2025,4,31) },
+  { label: '1ª Qz Jun',minD: new Date(2025,5,1),  maxD: new Date(2025,5,15) },
+  { label: '2ª Qz Jun',minD: new Date(2025,5,16), maxD: new Date(2025,5,30) },
+];
+
+// ── State ──
+let minVal = 0;
+let maxVal = MAX_OFFSET;
+let activeDisc = 'all';
+
+const sliderMin = document.getElementById('sliderMin');
+const sliderMax = document.getElementById('sliderMax');
+const rangeFill = document.getElementById('rangeFill');
+const rangeDisplay = document.getElementById('rangeDisplay');
+
+sliderMin.max = MAX_OFFSET;
+sliderMax.max = MAX_OFFSET;
+sliderMin.value = 0;
+sliderMax.value = MAX_OFFSET;
+
+// ── Tick marks ──
+function buildTicks() {
+  const row = document.getElementById('tickRow');
+  row.innerHTML = '';
+  MONTHS.forEach(({ label, m }) => {
+    const el = document.createElement('div');
+    el.className = 'tick';
+    el.dataset.month = m;
+    el.textContent = label;
+    row.appendChild(el);
+  });
+}
+
+function updateTicks() {
+  const minDate = offsetToDate(minVal);
+  const maxDate = offsetToDate(maxVal);
+  document.querySelectorAll('.tick').forEach(el => {
+    const m = parseInt(el.dataset.month);
+    const mStart = new Date(2025, m - 1, 1);
+    const mEnd   = new Date(2025, m, 0);
+    const overlap = mStart <= maxDate && mEnd >= minDate;
+    el.classList.toggle('in-range', overlap);
+  });
+}
+
+function updateFill() {
+  const pMin = (minVal / MAX_OFFSET) * 100;
+  const pMax = (maxVal / MAX_OFFSET) * 100;
+  rangeFill.style.left  = pMin + '%';
+  rangeFill.style.width = (pMax - pMin) + '%';
+}
+
+function updateDisplay() {
+  const a = offsetToDate(minVal);
+  const b = offsetToDate(maxVal);
+  rangeDisplay.textContent = fmt(a) + ' → ' + fmt(b);
+}
+
+function syncSliders() {
+  minVal = Math.min(parseInt(sliderMin.value), parseInt(sliderMax.value) - 1);
+  maxVal = Math.max(parseInt(sliderMax.value), parseInt(sliderMin.value) + 1);
+  sliderMin.value = minVal;
+  sliderMax.value = maxVal;
+  updateFill();
+  updateDisplay();
+  updateTicks();
+  updatePresets();
+  render();
+}
+
+sliderMin.addEventListener('input', syncSliders);
+sliderMax.addEventListener('input', syncSliders);
+
+// ── Presets ──
+function buildPresets() {
+  const row = document.getElementById('presetRow');
+  row.innerHTML = '';
+  PRESETS.forEach((p, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'preset-btn';
+    btn.textContent = p.label;
+    btn.dataset.idx = i;
+    btn.onclick = () => {
+      sliderMin.value = dayOffset(p.minD);
+      sliderMax.value = dayOffset(p.maxD);
+      syncSliders();
+    };
+    row.appendChild(btn);
+  });
+}
+
+function updatePresets() {
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    const p = PRESETS[parseInt(btn.dataset.idx)];
+    const pMin = dayOffset(p.minD);
+    const pMax = dayOffset(p.maxD);
+    btn.classList.toggle('active', pMin === minVal && pMax === maxVal);
+  });
+}
+
+// ── Discipline filter ──
+function buildDiscFilter() {
+  const row = document.getElementById('discFilterRow');
+  row.innerHTML = '';
+  [{ id: 'all', label: 'Todas' }, ...DISCIPLINES].forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (activeDisc === d.id ? ' active-disc' : '');
+    btn.textContent = d.label;
+    btn.onclick = () => { activeDisc = d.id; render(); };
+    row.appendChild(btn);
+  });
+}
+
+// ── Helpers ──
+function rowClass(type) {
+  if (type === 'exam')     return 'row-exam';
+  if (type === 'final')    return 'row-final';
+  if (type === 'practice') return 'row-practice';
+  return 'row-task';
+}
+
+function inRange(dateStr) {
+  const d = parseDMY(dateStr);
+  const minD = offsetToDate(minVal);
+  const maxD = offsetToDate(maxVal);
+  return d >= minD && d <= maxD;
+}
+
+function makeEventRow(ev) {
+  const row = document.createElement('div');
+  row.className = 'event-row ' + rowClass(ev.type);
+  const badge = document.createElement('div');
+  badge.className = 'date-badge';
+  badge.textContent = ev.date;
+  const label = document.createElement('div');
+  label.className = 'event-label';
+  label.textContent = ev.label;
+  row.appendChild(badge);
+  row.appendChild(label);
+  return row;
+}
+
+function getDiscEvents(disc) {
+  if (disc.subgroups) return disc.subgroups.flatMap(sg => sg.events.map(e => ({ ...e, sublabel: sg.sublabel })));
+  return disc.events || [];
+}
+
+// ── Render ──
+function render() {
+  // rebuild discipline buttons (to reflect activeDisc)
+  buildDiscFilter();
+
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+
+  const disciplines = activeDisc === 'all' ? DISCIPLINES : DISCIPLINES.filter(d => d.id === activeDisc);
+
+  let totalCount = 0;
+
+  disciplines.forEach((disc, di) => {
+    if (disc.subgroups) {
+      disc.subgroups.forEach((sg, sgi) => {
+        const filtered = sg.events
+          .filter(e => inRange(e.date))
+          .sort((a, b) => toSortNum(a.date) - toSortNum(b.date));
+        if (!filtered.length) return;
+        totalCount += filtered.length;
+
+        const block = document.createElement('div');
+        block.className = 'discipline-block';
+        block.style.animationDelay = ((di + sgi) * 0.04) + 's';
+
+        const lbl = document.createElement('div');
+        lbl.className = 'discipline-label';
+        lbl.textContent = sg.sublabel === disc.label ? disc.label : disc.label + ' · ' + sg.sublabel;
+        block.appendChild(lbl);
+
+        filtered.forEach(ev => block.appendChild(makeEventRow(ev)));
+        content.appendChild(block);
+      });
+    } else {
+      const filtered = (disc.events || [])
+        .filter(e => inRange(e.date))
+        .sort((a, b) => toSortNum(a.date) - toSortNum(b.date));
+      if (!filtered.length) return;
+      totalCount += filtered.length;
+
+      const block = document.createElement('div');
+      block.className = 'discipline-block';
+      block.style.animationDelay = (di * 0.04) + 's';
+
+      const lbl = document.createElement('div');
+      lbl.className = 'discipline-label';
+      lbl.textContent = disc.label;
+      block.appendChild(lbl);
+
+      filtered.forEach(ev => block.appendChild(makeEventRow(ev)));
+      content.appendChild(block);
+    }
+  });
+
+  if (!content.children.length) {
+    content.innerHTML = '<div class="empty">Nenhuma atividade no período selecionado.</div>';
+  }
+
+  document.getElementById('countNum').textContent = totalCount;
+}
+
+// ── Init ──
+buildTicks();
+buildPresets();
+syncSliders();
+</script>
+</body>
+</html>
