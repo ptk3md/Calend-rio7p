@@ -1,4 +1,10 @@
-data: [
+const EXTERNAL_CONFIG = {
+  title: "Calendário Acadêmico",
+  subtitle: "7º Período",
+  year: 2026,
+  semesterStart: "2026-02-09",
+  semesterEnd: "2026-07-07",
+  data: [
     // --- JANEIRO/FEVEREIRO 2026 ---
     { d: "09/02", disc: "Início do caos", title: "Volta às Aulas", type: "outros" },
     { d: "23/02", disc: "Ortopedia", title: "Seminário 1 Ortop", type: "trabalho" },
@@ -16,7 +22,6 @@ data: [
     { d: "10/04", disc: "Ginecologia", title: "B1 Hac GO", type: "pratica" },
     { d: "13/04", disc: "Ginecologia", title: "AV1 GO", type: "prova" },
     { d: "13/04", disc: "Ortopedia", title: "Seminário 7 Ortop", type: "trabalho" },
-    // NOVO: Pediatria P1
     { d: "15/04", disc: "Pediatria", title: "P1 Teórica e Multimídia (13:30h)", type: "prova" },
     { d: "17/04", disc: "Ginecologia", title: "B1 DPGO", type: "pratica" },
     { d: "20/04", disc: "Ortopedia", title: "AVT1 Ortop", type: "prova" },
@@ -43,21 +48,14 @@ data: [
     { d: "11/06", disc: "Clínica Médica", title: "AVE2 Clínica", type: "prova" },
     { d: "12/06", disc: "Clínica Médica", title: "B4 CSR", type: "pratica" },
     { d: "15/06", disc: "Oftalmologia", title: "P2 (Projeto Mídias)", type: "trabalho" },
-    
-    // NOVO: Pediatria OSCE Dia 1
     { d: "16/06", disc: "Pediatria", title: "OSCE Ped", type: "prova" },
     { d: "16/06", disc: "Clínica Médica", title: "AVP2 Clínica (Início)", type: "final" },
-    
-    // NOVO: Pediatria OSCE Dia 2
     { d: "17/06", disc: "Pediatria", title: "OSCE P2 (13:00h)", type: "prova" },
-    
     { d: "19/06", disc: "Clínica Médica", title: "B4 CSR (e fim AVP2)", type: "pratica" },
     { d: "22/06", disc: "Ginecologia", title: "AV2 GO", type: "final" },
-    
-    // NOVO: Pediatria P2 Teórica
     { d: "24/06", disc: "Pediatria", title: "P2 Teórica (13:30h)", type: "prova" },
 
     // --- JULHO 2026 ---
-    // NOVO: Pediatria Final
     { d: "07/07", disc: "Pediatria", title: "Avaliação Final (13:30h)", type: "final" }
   ]
+};
