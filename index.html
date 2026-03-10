@@ -115,6 +115,43 @@
   .skeleton { background: linear-gradient(90deg, var(--card-border) 25%, var(--card-hover) 50%, var(--card-border) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
   .sk-card { height: 74px; border-radius: 12px; margin-bottom: 10px; }
   @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* ─── RESPONSIVIDADE (MOBILE) ─── */
+  @media (max-width: 600px) {
+    /* Diminui a fonte raiz: tudo o que usa 'rem' vai encolher automaticamente */
+    html { font-size: 14px; } 
+    
+    /* Reduz o espaçamento nas bordas da página */
+    body { padding: 1.5rem 0.8rem; padding-top: 2.5rem; }
+    
+    /* Ajusta o tamanho dos controlos */
+    .controls { padding: 1rem; }
+    .top-tools { margin-bottom: 1rem; }
+    .filter-tags { gap: 0.4rem; }
+    .tag { padding: 6px 12px; }
+    
+    /* Ajusta o cartão de evento para ganhar espaço interno */
+    .event-card {
+      grid-template-columns: 60px 1fr auto;
+    }
+    .date-box { padding: 0 5px; }
+    .info-box { padding: 12px; }
+    
+    /* Ajustes finos nos textos para não quebrarem a linha em telemóveis pequenos */
+    .badge { margin-left: 6px; padding: 2px 6px; letter-spacing: 0; }
+    .btn-add-cal { padding: 6px; }
+    .btn-add-cal svg { width: 18px; height: 18px; }
+  }
+
+  /* Para ecrãs ainda mais pequenos */
+  @media (max-width: 360px) {
+    html { font-size: 13px; }
+    .event-card { grid-template-columns: 55px 1fr auto; }
+    
+    /* Joga a tag (ex: "Hoje!", "Amanhã") para a linha de baixo se o título for muito grande */
+    .card-top-row { flex-wrap: wrap; gap: 4px; }
+    .badge { margin-left: 0; }
+  }
 </style>
 </head>
 <body>
