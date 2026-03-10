@@ -1,115 +1,660 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Immersive Chinese Clone</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<title>Calendário Acadêmico 2026</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  /* ─── VARIÁVEIS ─── */
+  :root {
+    --bg-color: #0a0a0a;
+    --card-bg: rgba(24, 24, 24, 0.85);
+    --card-hover: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.05);
+    --text-main: #e0e0e0;
+    --text-muted: #888888;
+    --accent: #5c8dd6;
+    --tag-bg: rgba(255,255,255,0.05);
+    --tag-bg-active: var(--accent);
+    --input-bg: rgba(20, 20, 20, 0.9);
+    
+    /* Cores Badge */
+    --badge-today-bg: #ef4444; --badge-today-txt: #fff;
+    --badge-soon-bg: #eab308;  --badge-soon-txt: #000;
+    --badge-info-bg: rgba(255,255,255,0.1); --badge-info-txt: #ccc;
+
+    --danger: #cf4c4c; --success: #2ea073; --warning: #c78e28; --info: #4a7abd;
+    --radius: 16px; --font: 'Plus Jakarta Sans', sans-serif; --transition: 0.3s ease-in-out;
+  }
+
+  [data-theme="light"] {
+    --bg-color: #e5e7eb; --card-bg: rgba(250, 250, 250, 0.8);
+    --card-hover: rgba(255, 255, 255, 0.95); --card-border: rgba(0, 0, 0, 0.04);
+    --text-main: #333333; --text-muted: #666666;
+    --tag-bg: rgba(0,0,0,0.04); --input-bg: rgba(240, 240, 240, 0.9);
+    --accent: #3b71ca;
+    
+    --badge-today-bg: #dc2626; --badge-today-txt: #fff;
+    --badge-soon-bg: #ca8a04;  --badge-soon-txt: #fff;
+    --badge-info-bg: rgba(0,0,0,0.05); --badge-info-txt: #555;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+  body { font-family: var(--font); background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding: 2rem 1rem; padding-top: 3rem; transition: background-color var(--transition), color var(--transition); }
+  .container { max-width: 720px; margin: 0 auto; position: relative; }
+
+  /* PROGRESSO */
+  .progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: var(--tag-bg); z-index: 1000; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--success)); width: 0%; transition: width 1s ease-out; box-shadow: 0 0 10px var(--accent); }
+  .progress-label { position: fixed; top: 10px; right: 10px; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); z-index: 1001; background: var(--card-bg); padding: 4px 8px; border-radius: 8px; border: 1px solid var(--card-border); backdrop-filter: blur(4px); }
+
+  /* HEADER */
+  header { margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; }
+  h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
+  .subtitle { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; }
+  .header-actions { display: flex; gap: 0.5rem; align-items: center; }
+  .theme-toggle { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+
+  /* BOTÃO MODO REDUZIDO */
+  .btn-compact { background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-muted); height: 44px; padding: 0 14px; border-radius: 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: var(--transition); font-family: var(--font); font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+  .btn-compact:hover { color: var(--accent); border-color: var(--accent); }
+  .btn-compact svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  /* CONTROLS */
+  .controls { background: var(--card-bg); border: 1px solid var(--card-border); backdrop-filter: blur(12px); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; transition: background-color var(--transition), border-color var(--transition); }
+  .top-tools { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+  .search-box { flex: 1; position: relative; }
+  .search-box input { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 12px 12px 12px 40px; border-radius: 10px; font-family: var(--font); font-weight: 500; transition: var(--transition); }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px; }
+  .filter-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .tag { background: var(--tag-bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; user-select: none; }
+  .tag.active { background: var(--tag-bg-active); color: white; transform: scale(1.05); }
+
+  /* LIST & CARDS */
+  .month-header { position: sticky; top: 0px; z-index: 10; background: var(--bg-color); backdrop-filter: blur(10px); padding: 10px 0; margin-bottom: 10px; font-size: 1.1rem; font-weight: 800; color: var(--accent); border-bottom: 1px solid var(--card-border); text-transform: capitalize; transition: background-color var(--transition), color var(--transition), border-color var(--transition); }
+  .event-list { display: flex; flex-direction: column; gap: 0.8rem; padding-bottom: 1rem; }
+  .event-card { display: grid; grid-template-columns: 70px 1fr auto; align-items: stretch; background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid transparent; cursor: default; position: relative; transition: transform 0.2s, background-color var(--transition), border-color var(--transition); }
+  .event-card:hover { transform: translateY(-3px); background: var(--card-hover); border-color: var(--card-border); z-index: 2; }
+  
+  .date-box { background: var(--input-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 10px; font-size: 1.1rem; font-weight: 800; line-height: 1; color: var(--text-muted); transition: background-color var(--transition), color var(--transition); }
+  .date-box span { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
+  .info-box { padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; }
+  .card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .event-name { font-weight: 700; font-size: 1rem; color: var(--text-main); transition: color var(--transition); }
+  .event-disc { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .type-indicator { width: 5px; height: 100%; transition: background-color var(--transition); }
+
+  /* CORES TIPOS */
+  .type-prova .date-box { color: var(--danger); background: rgba(207, 76, 76, 0.15); } .type-prova .type-indicator { background: var(--danger); }
+  .type-pratica .date-box { color: var(--success); background: rgba(46, 160, 115, 0.15); } .type-pratica .type-indicator { background: var(--success); }
+  .type-trabalho .date-box { color: var(--info); background: rgba(74, 122, 189, 0.15); } .type-trabalho .type-indicator { background: var(--info); }
+  .type-final .date-box { color: var(--warning); background: rgba(199, 142, 40, 0.15); } .type-final .type-indicator { background: var(--warning); }
+  .type-outros .date-box { color: var(--text-muted); background: rgba(128,128,128,0.1); } .type-outros .type-indicator { background: var(--text-muted); }
+
+  /* BADGES */
+  .badge { font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.05em; margin-left: 10px; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color var(--transition), color var(--transition); }
+  .badge-today { background: var(--badge-today-bg); color: var(--badge-today-txt); animation: pulse 1.5s infinite; }
+  .badge-soon { background: var(--badge-soon-bg); color: var(--badge-soon-txt); }
+  .badge-info { background: var(--badge-info-bg); color: var(--badge-info-txt); border: 1px solid var(--card-border); }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+  
+  .actions { padding: 0 10px; display: flex; align-items: center; justify-content: center; }
+  .btn-add-cal { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 8px; border-radius: 8px; transition: all 0.2s; }
+  .btn-add-cal:hover { background: var(--tag-bg); color: var(--accent); transform: scale(1.1); }
+  .btn-add-cal svg { width: 20px; height: 20px; }
+
+  /* ARQUIVO */
+  .archive-section { margin-top: 2rem; border-top: 1px dashed var(--card-border); padding-top: 2rem; transition: border-color var(--transition); }
+  .btn-archive-toggle { background: var(--tag-bg); color: var(--text-muted); border: 1px solid var(--card-border); padding: 10px 24px; border-radius: 99px; font-size: 0.85rem; font-weight: 700; cursor: pointer; width: 100%; transition: var(--transition); }
+  .btn-archive-toggle:hover { background: var(--card-hover); color: var(--text-main); }
+  .event-card.is-past { filter: grayscale(1); opacity: 0.5; }
+
+  /* SKELETON */
+  .skeleton { background: linear-gradient(90deg, var(--card-border) 25%, var(--card-hover) 50%, var(--card-border) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 6px; }
+  .sk-card { height: 74px; border-radius: 12px; margin-bottom: 10px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* ─── MODO REDUZIDO (OVERLAY) ─── */
+  .compact-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: var(--bg-color);
+    overflow-y: auto;
+    padding: 0;
+  }
+  .compact-overlay.active { display: block; }
+
+  .compact-inner {
+    padding: 14px 14px 20px;
+    max-width: 100%;
+  }
+
+  /* Cabeçalho do modo reduzido */
+  .compact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .compact-header-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .compact-header-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+  .btn-close-compact {
+    background: var(--tag-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  .btn-close-compact:hover { color: var(--text-main); }
+
+  /* Grid de eventos compactos */
+  .compact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  /* Separador de mês no modo reduzido */
+  .compact-month {
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 6px 0 2px;
+    margin-top: 4px;
+    border-bottom: 1px solid var(--card-border);
+    margin-bottom: 2px;
+  }
+  .compact-month:first-child { margin-top: 0; }
+
+  /* Linha de evento compacta */
+  .compact-row {
+    display: grid;
+    grid-template-columns: 36px 3px 1fr auto;
+    align-items: center;
+    gap: 0 7px;
+    padding: 5px 6px;
+    border-radius: 7px;
+    background: var(--card-bg);
+    border: 1px solid transparent;
+    transition: background-color var(--transition);
+  }
+
+  .compact-date {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.1;
+    flex-shrink: 0;
+  }
+  .compact-date em {
+    display: block;
+    font-style: normal;
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .compact-dot {
+    width: 3px;
+    border-radius: 99px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .compact-text { min-width: 0; }
+  .compact-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+  .compact-disc {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .compact-badge {
+    font-size: 0.55rem;
+    font-weight: 800;
+    padding: 2px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Cores por tipo no modo compacto */
+  .compact-row.type-prova .compact-date { color: var(--danger); }
+  .compact-row.type-prova .compact-dot { background: var(--danger); }
+  .compact-row.type-pratica .compact-date { color: var(--success); }
+  .compact-row.type-pratica .compact-dot { background: var(--success); }
+  .compact-row.type-trabalho .compact-date { color: var(--info); }
+  .compact-row.type-trabalho .compact-dot { background: var(--info); }
+  .compact-row.type-final .compact-date { color: var(--warning); }
+  .compact-row.type-final .compact-dot { background: var(--warning); }
+  .compact-row.type-outros .compact-date { color: var(--text-muted); }
+  .compact-row.type-outros .compact-dot { background: var(--text-muted); }
+
+  /* Legenda */
+  .compact-legend {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--card-border);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;
+  }
+  .legend-dot.prova { background: var(--danger); }
+  .legend-dot.pratica { background: var(--success); }
+  .legend-dot.trabalho { background: var(--info); }
+  .legend-dot.final { background: var(--warning); }
+
+  /* ─── RESPONSIVIDADE (MOBILE) ─── */
+  @media (max-width: 600px) {
+    html { font-size: 14px; } 
+    body { padding: 1.5rem 0.8rem; padding-top: 2.5rem; }
+    .controls { padding: 1rem; }
+    .top-tools { margin-bottom: 1rem; }
+    .filter-tags { gap: 0.4rem; }
+    .tag { padding: 6px 12px; }
+    .event-card { grid-template-columns: 60px 1fr auto; }
+    .date-box { padding: 0 5px; }
+    .info-box { padding: 12px; }
+    .badge { margin-left: 6px; padding: 2px 6px; letter-spacing: 0; }
+    .btn-add-cal { padding: 6px; }
+    .btn-add-cal svg { width: 18px; height: 18px; }
+    .btn-compact span { display: none; }
+    .btn-compact { padding: 0 12px; }
+  }
+
+  @media (max-width: 360px) {
+    html { font-size: 13px; }
+    .event-card { grid-template-columns: 55px 1fr auto; }
+    .card-top-row { flex-wrap: wrap; gap: 4px; }
+    .badge { margin-left: 0; }
+  }
+</style>
 </head>
 <body>
-  <div id="app" class="app">
-    <section id="courseScreen" class="screen active">
-      <header class="top-header">
-        <div class="top-left">
-          <button class="icon-btn" aria-label="menu">☰</button>
-        </div>
 
-        <div class="top-title">Immersive Chinese</div>
+<div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+<div class="progress-label" id="progressLabel">0%</div>
 
-        <div class="top-right">
-          <button class="icon-btn" aria-label="config">⚙</button>
-        </div>
-      </header>
-
-      <nav class="tabbar">
-        <button class="tab active">Serial Course</button>
-        <button class="tab">Repetition Training</button>
-        <button class="tab">Materials</button>
-        <button class="tab">Pronunciation</button>
-      </nav>
-
-      <main class="course-layout">
-        <div id="courseAccordion" class="course-accordion"></div>
-      </main>
-    </section>
-
-    <section id="lessonScreen" class="screen lesson-screen">
-      <header class="lesson-header">
-        <button id="backBtn" class="back-btn" aria-label="voltar">←</button>
-        <div class="lesson-title-wrap">
-          <h1 id="lessonTitle">Lesson 1</h1>
-        </div>
-        <button class="settings-btn" aria-label="configurações">⚙</button>
-      </header>
-
-      <div id="sentenceProgress" class="sentence-progress"></div>
-
-      <div class="sentence-counter">
-        <span id="sentenceCounter">1/25</span>
+<!-- OVERLAY MODO REDUZIDO -->
+<div class="compact-overlay" id="compactOverlay">
+  <div class="compact-inner">
+    <div class="compact-header">
+      <div>
+        <div class="compact-header-title" id="compactTitle">Calendário · 7º Período</div>
+        <div class="compact-header-subtitle">Modo Reduzido — print-friendly</div>
       </div>
+      <button class="btn-close-compact" id="btnCloseCompact">✕ Fechar</button>
+    </div>
+    <div class="compact-grid" id="compactGrid"></div>
+    <div class="compact-legend">
+      <div class="legend-item"><div class="legend-dot prova"></div>Prova</div>
+      <div class="legend-item"><div class="legend-dot pratica"></div>Prática</div>
+      <div class="legend-item"><div class="legend-dot trabalho"></div>Trabalho</div>
+      <div class="legend-item"><div class="legend-dot final"></div>Final</div>
+    </div>
+  </div>
+</div>
 
-      <div class="lesson-main">
-        <div class="sentence-area">
-          <div class="sentence-card">
-            <div
-              id="pinyinLine"
-              class="sentence-line pinyin-line"
-              role="button"
-              tabindex="0"
-            ></div>
+<div class="container">
+  <header>
+    <div class="header-text">
+      <h1 id="appTitle">Calendário</h1>
+      <div class="subtitle" id="appSubtitle">Carregando...</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-compact" id="btnCompact" title="Modo Reduzido para print">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10M4 18h7"/></svg>
+        <span>Modo Reduzido</span>
+      </button>
+      <button class="theme-toggle" id="themeBtn"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg></button>
+    </div>
+  </header>
 
-            <div class="divider"></div>
-
-            <div
-              id="charactersLine"
-              class="sentence-line reveal-line hidden-placeholder"
-              role="button"
-              tabindex="0"
-            >
-              Show characters
-            </div>
-
-            <div class="divider"></div>
-
-            <div
-              id="translationLine"
-              class="sentence-line reveal-line hidden-placeholder translation-placeholder"
-              role="button"
-              tabindex="0"
-            >
-              Show translation
-            </div>
-          </div>
-
-          <div class="vocab-strip-wrap">
-            <div id="newWordBadge" class="new-word-badge">new word</div>
-            <div id="vocabStrip" class="vocab-strip"></div>
-          </div>
-        </div>
-
-        <aside class="toolbar">
-          <button id="repeatBtn" class="tool-btn" title="repetição">↻▶</button>
-          <button id="speedBtn" class="tool-btn" title="velocidade">B</button>
-          <button id="playBtn" class="play-btn" title="próxima frase">▶</button>
-          <button id="listBtn" class="tool-btn" title="lista">☷</button>
-          <button id="notesBtn" class="tool-btn" title="notas">📋</button>
-        </aside>
+  <div class="controls">
+    <div class="top-tools">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar matéria, exame..." autocomplete="off">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
-
-      <button id="prevSentenceBtn" class="nav-arrow nav-arrow-left" aria-label="anterior">‹</button>
-      <button id="nextSentenceBtn" class="nav-arrow nav-arrow-right" aria-label="próxima">›</button>
-
-      <div id="overlayPanel" class="overlay-panel hidden">
-        <div class="overlay-header">
-          <h2 id="overlayTitle">Lista</h2>
-          <button id="closeOverlayBtn" class="close-overlay-btn">✕</button>
-        </div>
-        <div id="overlayContent" class="overlay-content"></div>
-      </div>
-    </section>
+    </div>
+    <div class="filter-tags" id="disciplineFilters"></div>
   </div>
 
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <main id="eventsContainer" class="event-list"></main>
+  
+  <div class="archive-section" id="archiveSection" style="display: none;">
+    <button class="btn-archive-toggle" id="btnToggleArchive">Ver Histórico (<span id="archiveCount">0</span>)</button>
+    <div id="archiveContainer" class="event-list" style="margin-top: 15px; display: none;"></div>
+  </div>
+</div>
+
+<script>
+    const script = document.createElement('script');
+    script.src = 'data.js?v=' + new Date().getTime();
+    document.body.appendChild(script);
+    script.onload = () => new App();
+    script.onerror = () => alert("Erro ao carregar 'data.js'.");
+</script>
+
+<script>
+class App {
+  constructor() {
+    this.events = [];
+    this.today = new Date(); this.today.setHours(0,0,0,0);
+    this.state = { activeDisc: 'Todas', searchTerm: '', isArchiveOpen: false };
+    
+    if (typeof EXTERNAL_CONFIG === 'undefined') return;
+    this.renderSkeleton();
+    setTimeout(() => this.init(), 600);
+  }
+
+  init() {
+    const CONFIG = EXTERNAL_CONFIG;
+    this.events = CONFIG.data.map(item => {
+      const [d, m] = item.d.split('/').map(Number);
+      const dateObj = new Date(CONFIG.year, m - 1, d);
+      return { ...item, dateObj, sortTime: dateObj.getTime() };
+    }).sort((a, b) => a.sortTime - b.sortTime);
+
+    document.getElementById('appTitle').innerText = CONFIG.title;
+    document.getElementById('appSubtitle').innerText = CONFIG.subtitle;
+    document.getElementById('compactTitle').innerText = `${CONFIG.title} · ${CONFIG.subtitle}`;
+
+    this.setupTheme();
+    this.setupFilters();
+    this.setupSearch();
+    this.setupArchive();
+    this.setupCompactMode();
+    this.updateProgress(CONFIG);
+    this.render();
+  }
+
+  updateProgress(config) {
+    const start = new Date(config.semesterStart);
+    const end = new Date(config.semesterEnd);
+    const total = end - start;
+    const current = this.today - start;
+    let pct = Math.floor((current / total) * 100);
+    if (pct < 0) pct = 0; if (pct > 100) pct = 100;
+    document.getElementById('progressBar').style.width = `${pct}%`;
+    document.getElementById('progressLabel').innerText = `${pct}% Concluído`;
+  }
+
+  renderSkeleton() {
+    document.getElementById('eventsContainer').innerHTML = Array(5).fill('<div class="skeleton sk-card"></div>').join('');
+  }
+
+  setupTheme() {
+    const btn = document.getElementById('themeBtn');
+    let isDark = localStorage.getItem('theme') !== 'light';
+    const apply = () => document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    apply();
+    btn.onclick = () => { isDark = !isDark; localStorage.setItem('theme', isDark?'dark':'light'); apply(); };
+  }
+
+  setupFilters() {
+    const uniqueDiscs = ['Todas', ...new Set(this.events.map(e => e.disc))]
+        .filter(d => d !== 'Início do caos');
+        
+    const container = document.getElementById('disciplineFilters');
+    container.innerHTML = '';
+    uniqueDiscs.forEach(disc => {
+      const btn = document.createElement('button');
+      btn.className = `tag ${disc === 'Todas' ? 'active' : ''}`;
+      btn.textContent = disc;
+      btn.onclick = (e) => {
+        this.state.activeDisc = disc;
+        document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+        this.render();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  setupSearch() {
+    document.getElementById('searchInput').oninput = (e) => {
+      this.state.searchTerm = e.target.value.toLowerCase();
+      this.render();
+    };
+  }
+
+  setupArchive() {
+    const btn = document.getElementById('btnToggleArchive');
+    btn.onclick = () => {
+        this.state.isArchiveOpen = !this.state.isArchiveOpen;
+        document.getElementById('archiveContainer').style.display = this.state.isArchiveOpen ? 'flex' : 'none';
+        btn.innerText = this.state.isArchiveOpen ? "Ocultar Histórico" : `Ver Histórico (${document.getElementById('archiveCount').innerText})`;
+    };
+  }
+
+  setupCompactMode() {
+    const overlay = document.getElementById('compactOverlay');
+    const btnOpen = document.getElementById('btnCompact');
+    const btnClose = document.getElementById('btnCloseCompact');
+
+    btnOpen.onclick = () => {
+      this.renderCompact();
+      overlay.classList.add('active');
+      overlay.scrollTop = 0;
+    };
+
+    btnClose.onclick = () => {
+      overlay.classList.remove('active');
+    };
+
+    // Fechar com ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') overlay.classList.remove('active');
+    });
+  }
+
+  renderCompact() {
+    const grid = document.getElementById('compactGrid');
+    grid.innerHTML = '';
+
+    // Mostra TODOS os eventos (passados + futuros), ordenados
+    const allEvents = [...this.events].filter(ev => ev.disc !== 'Início do caos');
+
+    let currentMonth = '';
+    allEvents.forEach(ev => {
+      const evMonth = ev.dateObj.toLocaleString('pt-BR', { month: 'long' });
+      const evYear = ev.dateObj.getFullYear();
+      const monthKey = `${evMonth} ${evYear}`;
+
+      if (monthKey !== currentMonth) {
+        currentMonth = monthKey;
+        const header = document.createElement('div');
+        header.className = 'compact-month';
+        header.innerText = monthKey;
+        grid.appendChild(header);
+      }
+
+      const isPast = ev.dateObj < this.today;
+      const { day, month } = this.fmtBox(ev.dateObj);
+
+      // Badge de urgência apenas para os próximos
+      let urgencyHtml = '';
+      if (!isPast) {
+        const diffDays = Math.ceil((ev.dateObj - this.today) / (1000 * 60 * 60 * 24));
+        if (diffDays === 0) {
+          urgencyHtml = `<span class="compact-badge badge-today">Hoje</span>`;
+        } else if (diffDays === 1) {
+          urgencyHtml = `<span class="compact-badge badge-soon">Amanhã</span>`;
+        } else if (diffDays <= 7) {
+          urgencyHtml = `<span class="compact-badge badge-soon">${diffDays}d</span>`;
+        }
+      }
+
+      const row = document.createElement('div');
+      row.className = `compact-row type-${ev.type}${isPast ? ' is-past' : ''}`;
+      row.innerHTML = `
+        <div class="compact-date">${day}<em>${month}</em></div>
+        <div class="compact-dot"></div>
+        <div class="compact-text">
+          <div class="compact-title">${ev.title}</div>
+          <div class="compact-disc">${ev.disc}</div>
+        </div>
+        ${urgencyHtml}
+      `;
+      grid.appendChild(row);
+    });
+  }
+
+  fmtBox(d) { return { day: d.getDate().toString().padStart(2,'0'), month: d.toLocaleString('pt-BR',{month:'short'}).replace('.','') }; }
+
+  openGoogleCalendar(ev) {
+    const fmt = (d) => d.toISOString().replace(/-|:|\.\d\d\d/g, "").slice(0, 15) + "Z";
+    const start = fmt(ev.dateObj);
+    const endDate = new Date(ev.dateObj); endDate.setHours(endDate.getHours() + 1);
+    const end = fmt(endDate);
+    const details = encodeURIComponent(`${ev.disc} - ${ev.type}.`);
+    const title = encodeURIComponent(ev.title);
+    window.open(`https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&sf=true&output=xml`, '_blank');
+  }
+
+  getUrgency(dateObj) {
+    const diffTime = dateObj - this.today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    
+    if (diffDays === 0) return { text: 'Hoje!', class: 'badge-today' };
+    if (diffDays === 1) return { text: 'Amanhã', class: 'badge-soon' };
+    if (diffDays > 1 && diffDays <= 7) return { text: `${diffDays} dias`, class: 'badge-soon' };
+    return { text: `${diffDays} dias`, class: 'badge-info' };
+  }
+
+  createCard(ev, isPast, index) {
+    const { day, month } = this.fmtBox(ev.dateObj);
+    
+    let urgency = null;
+    if (!isPast && index < 3) {
+        urgency = this.getUrgency(ev.dateObj);
+    }
+
+    const el = document.createElement('div');
+    el.className = `event-card type-${ev.type} ${isPast ? 'is-past' : ''}`;
+    
+    const btnCal = document.createElement('button');
+    btnCal.className = 'btn-add-cal';
+    btnCal.title = "Abrir no Google Calendar";
+    btnCal.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
+    btnCal.onclick = () => this.openGoogleCalendar(ev);
+
+    el.innerHTML = `
+      <div class="date-box">${day}<span>${month}</span></div>
+      <div class="info-box">
+        <div class="card-top-row">
+           <div class="event-name">${ev.title}</div>
+           ${urgency ? `<div class="badge ${urgency.class}">${urgency.text}</div>` : ''}
+        </div>
+        <div class="event-disc">${ev.disc}</div>
+      </div>
+      <div class="type-indicator" title="${ev.type}"></div>
+    `;
+    const actions = document.createElement('div'); actions.className = 'actions';
+    actions.appendChild(btnCal); el.appendChild(actions);
+    return el;
+  }
+
+  render() {
+    const mainContainer = document.getElementById('eventsContainer');
+    const archiveContainer = document.getElementById('archiveContainer');
+    
+    const filtered = this.events.filter(ev => {
+        const inDisc = this.state.activeDisc === 'Todas' || ev.disc === this.state.activeDisc;
+        const term = this.state.searchTerm;
+        const inSearch = ev.title.toLowerCase().includes(term) || ev.disc.toLowerCase().includes(term);
+        return inDisc && inSearch;
+    });
+
+    const futureEvents = filtered.filter(ev => ev.dateObj >= this.today);
+    const pastEvents = filtered.filter(ev => ev.dateObj < this.today);
+
+    document.getElementById('archiveCount').innerText = pastEvents.length;
+    document.getElementById('archiveSection').style.display = pastEvents.length > 0 ? 'block' : 'none';
+
+    mainContainer.innerHTML = '';
+    if (futureEvents.length === 0) {
+        mainContainer.innerHTML = `<div class="empty-state">🍃 Nada pendente.</div>`;
+    } else {
+        let currentMonth = '';
+        futureEvents.forEach((ev, index) => {
+            const evMonth = ev.dateObj.toLocaleString('pt-BR', { month: 'long' });
+            if (evMonth !== currentMonth) {
+                currentMonth = evMonth;
+                const header = document.createElement('div');
+                header.className = 'month-header';
+                header.innerText = currentMonth;
+                mainContainer.appendChild(header);
+            }
+            mainContainer.appendChild(this.createCard(ev, false, index));
+        });
+    }
+
+    archiveContainer.innerHTML = '';
+    pastEvents.forEach(ev => archiveContainer.appendChild(this.createCard(ev, true)));
+  }
+}
+</script>
 </body>
 </html>
