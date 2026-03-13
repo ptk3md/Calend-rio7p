@@ -8,7 +8,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
-<title>Calendário 2026.1</title>
+<title>Calendário Acadêmico 2026</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -564,10 +564,9 @@ class App {
   createCard(ev, isPast, index) {
     const { day, month } = this.fmtBox(ev.dateObj);
     
+    // Compute urgency for ALL future events; first 3 start visible, rest start hidden
     let urgency = null;
-    if (!isPast && index < 3) {
-        urgency = this.getUrgency(ev.dateObj);
-    }
+    if (!isPast) urgency = this.getUrgency(ev.dateObj);
 
     const el = document.createElement('div');
     el.className = `event-card type-${ev.type} ${isPast ? 'is-past' : ''}`;
@@ -578,17 +577,29 @@ class App {
     btnCal.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
     btnCal.onclick = () => this.openGoogleCalendar(ev);
 
+    const badgeVisible = !isPast && index < 3;
     el.innerHTML = `
       <div class="date-box">${day}<span>${month}</span></div>
       <div class="info-box">
         <div class="card-top-row">
            <div class="event-name">${ev.title}</div>
-           ${urgency ? `<div class="badge ${urgency.class}">${urgency.text}</div>` : ''}
+           ${urgency ? `<div class="badge ${urgency.class}" style="${badgeVisible ? '' : 'display:none'}">${urgency.text}</div>` : ''}
         </div>
         <div class="event-disc">${ev.disc}</div>
       </div>
       <div class="type-indicator" title="${ev.type}"></div>
     `;
+
+    // Click on card toggles the badge for future events
+    if (!isPast && urgency) {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', (e) => {
+        if (e.target.closest('.btn-add-cal')) return;
+        const badge = el.querySelector('.badge');
+        if (badge) badge.style.display = badge.style.display === 'none' ? '' : 'none';
+      });
+    }
+
     const actions = document.createElement('div'); actions.className = 'actions';
     actions.appendChild(btnCal); el.appendChild(actions);
     return el;
