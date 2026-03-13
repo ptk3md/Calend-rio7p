@@ -1,5 +1,5 @@
 const EXTERNAL_CONFIG = {
-  title: "Calendário Acadêmico",
+  title: "Calendário 2026.1",
   subtitle: "7º Período",
   year: 2026,
   semesterStart: "2026-02-09",
