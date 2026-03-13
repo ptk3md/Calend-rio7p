@@ -8,7 +8,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
-<title>Calendário Acadêmico 2026</title>
+<title>Calendário 2026.1</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
@@ -69,13 +69,9 @@
   .btn-compact svg { width: 15px; height: 15px; flex-shrink: 0; }
 
   /* CONTROLS */
-  .controls { background: var(--card-bg); border: 1px solid var(--card-border); backdrop-filter: blur(12px); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; transition: background-color var(--transition), border-color var(--transition); }
-  .top-tools { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
-  .search-box { flex: 1; position: relative; }
-  .search-box input { width: 100%; background: var(--input-bg); border: 1px solid var(--card-border); color: var(--text-main); padding: 12px 12px 12px 40px; border-radius: 10px; font-family: var(--font); font-weight: 500; transition: var(--transition); }
-  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 18px; }
-  .filter-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-  .tag { background: var(--tag-bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; user-select: none; }
+  .controls { background: var(--card-bg); border: 1px solid var(--card-border); backdrop-filter: blur(12px); border-radius: var(--radius); padding: 0.75rem 1rem; margin-bottom: 2rem; transition: background-color var(--transition), border-color var(--transition); }
+  .filter-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .tag { background: var(--tag-bg); border: 1px solid var(--card-border); color: var(--text-muted); padding: 5px 11px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; cursor: pointer; transition: all 0.2s; user-select: none; }
   .tag.active { background: var(--tag-bg-active); color: white; transform: scale(1.05); }
 
   /* LIST & CARDS */
@@ -308,10 +304,9 @@
   @media (max-width: 600px) {
     html { font-size: 14px; } 
     body { padding: 1.5rem 0.8rem; padding-top: 2.5rem; }
-    .controls { padding: 1rem; }
-    .top-tools { margin-bottom: 1rem; }
-    .filter-tags { gap: 0.4rem; }
-    .tag { padding: 6px 12px; }
+    .controls { padding: 0.6rem 0.8rem; }
+    .filter-tags { gap: 0.3rem; }
+    .tag { padding: 4px 9px; }
     .event-card { grid-template-columns: 60px 1fr auto; }
     .date-box { padding: 0 5px; }
     .info-box { padding: 12px; }
@@ -371,12 +366,6 @@
   </header>
 
   <div class="controls">
-    <div class="top-tools">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Buscar matéria, exame..." autocomplete="off">
-        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-      </div>
-    </div>
     <div class="filter-tags" id="disciplineFilters"></div>
   </div>
 
@@ -401,7 +390,7 @@ class App {
   constructor() {
     this.events = [];
     this.today = new Date(); this.today.setHours(0,0,0,0);
-    this.state = { activeDisc: 'Todas', searchTerm: '', isArchiveOpen: false };
+    this.state = { activeDisc: 'Todas', isArchiveOpen: false };
     
     if (typeof EXTERNAL_CONFIG === 'undefined') return;
     this.renderSkeleton();
@@ -422,7 +411,6 @@ class App {
 
     this.setupTheme();
     this.setupFilters();
-    this.setupSearch();
     this.setupArchive();
     this.setupCompactMode();
     this.updateProgress(CONFIG);
@@ -472,13 +460,6 @@ class App {
     });
   }
 
-  setupSearch() {
-    document.getElementById('searchInput').oninput = (e) => {
-      this.state.searchTerm = e.target.value.toLowerCase();
-      this.render();
-    };
-  }
-
   setupArchive() {
     const btn = document.getElementById('btnToggleArchive');
     btn.onclick = () => {
@@ -503,7 +484,6 @@ class App {
       overlay.classList.remove('active');
     };
 
-    // Fechar com ESC
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') overlay.classList.remove('active');
     });
@@ -513,7 +493,6 @@ class App {
     const grid = document.getElementById('compactGrid');
     grid.innerHTML = '';
 
-    // Mostra TODOS os eventos (passados + futuros), ordenados
     const allEvents = [...this.events].filter(ev => ev.disc !== 'Início do caos');
 
     let currentMonth = '';
@@ -533,7 +512,6 @@ class App {
       const isPast = ev.dateObj < this.today;
       const { day, month } = this.fmtBox(ev.dateObj);
 
-      // Badge de urgência apenas para os próximos
       let urgencyHtml = '';
       if (!isPast) {
         const diffDays = Math.ceil((ev.dateObj - this.today) / (1000 * 60 * 60 * 24));
@@ -622,9 +600,7 @@ class App {
     
     const filtered = this.events.filter(ev => {
         const inDisc = this.state.activeDisc === 'Todas' || ev.disc === this.state.activeDisc;
-        const term = this.state.searchTerm;
-        const inSearch = ev.title.toLowerCase().includes(term) || ev.disc.toLowerCase().includes(term);
-        return inDisc && inSearch;
+        return inDisc;
     });
 
     const futureEvents = filtered.filter(ev => ev.dateObj >= this.today);
