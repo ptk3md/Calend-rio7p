@@ -48,9 +48,9 @@ const EXTERNAL_CONFIG = {
 
     // --- JULHO 2026 ---
     { d: "02/07", disc: "Ginecologia", title: "Prova Final GO", type: "final" },
-    { d: "07/07", disc: "Pediatria", title: "Avaliação Final (13:30h)", type: "final" },
-    { d: "30/06", disc: "Clínica Médica", title: "Avaliação Prática Final", type: "final" },
-    { d: "01/07", disc: "Clínica Médica", title: "Avaliação Escrita Final", type: "final" }
+    { d: "07/07", disc: "Pediatria", title: "PF Avaliação Final (13:30h)", type: "final" },
+    { d: "30/06", disc: "Clínica Médica", title: "PF Prática Final", type: "final" },
+    { d: "01/07", disc: "Clínica Médica", title: "PF Escrita Final", type: "final" }
 
   ]
 };
