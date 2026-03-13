@@ -43,10 +43,14 @@ const EXTERNAL_CONFIG = {
     { d: "17/06", disc: "Pediatria", title: "OSCE — P2 (13:00h)", type: "prova" },
     { d: "19/06", disc: "Clínica Médica", title: "AVP2 Clínica — Fim", type: "prova" },
     { d: "22/06", disc: "Ginecologia", title: "AV2 GO", type: "prova" },
+    { d: "22/06", disc: "Oftalmologia", title: "Prova Final Oftalmo", type: "final" },
     { d: "24/06", disc: "Pediatria", title: "P2 Teórica (13:30h)", type: "prova" },
 
     // --- JULHO 2026 ---
-    { d: "07/07", disc: "Pediatria", title: "Avaliação Final (13:30h)", type: "final" }
+    { d: "02/07", disc: "Ginecologia", title: "Prova Final GO", type: "final" },
+    { d: "07/07", disc: "Pediatria", title: "Avaliação Final (13:30h)", type: "final" },
+    { d: "30/06", disc: "Clínica Médica", title: "Avaliação Prática Final", type: "final" },
+    { d: "01/07", disc: "Clínica Médica", title: "Avaliação Escrita Final", type: "final" }
 
   ]
 };
